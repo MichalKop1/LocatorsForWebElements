@@ -33,4 +33,11 @@ public class SearchPage
 
 		return itemList.All(item => item.Text.ToLower().Contains(phrase));
 	}
+
+	public IndexPage GoBack()
+	{
+		driver.Navigate().Back();
+
+		return new IndexPage(driver);
+	}
 }

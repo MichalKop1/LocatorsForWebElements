@@ -89,7 +89,12 @@ public class IndexPage
 		var searchInput = searchPanelWait.Until(_ => searchPanel.FindElement(SearchInputLocator));
 
 		var actions = new Actions(driver);
-		actions.Click(searchInput)
+		actions
+			.Click(searchInput)
+			.KeyDown(Keys.Control)
+			.SendKeys("a")
+			.KeyUp(Keys.Control)
+			.SendKeys(Keys.Backspace)
 			.Pause(TimeSpan.FromSeconds(1))
 			.SendKeys(phrase)
 			.Perform();

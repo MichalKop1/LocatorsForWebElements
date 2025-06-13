@@ -6,8 +6,11 @@ using LocatorsForWebElements.Factories;
 
 namespace LocatorsForWebElementsTests;
 
-[TestFixture]
-public class EpamPageTests
+[TestFixture(Browser.Chrome)]
+[TestFixture(Browser.Firefox)]
+[TestFixture(Browser.Opera)]
+[TestFixture(Browser.Edge)]
+public class EpamPageTests(Browser browser)
 {
 	private IWebDriver driver;
 	private IndexPage indexPage;
@@ -20,9 +23,9 @@ public class EpamPageTests
 		var optionsBuilder = new WebDriverBuilder();
 		var options = optionsBuilder
 			.Incognito()
-			.Build(Browser.Chrome);
+			.Build(browser);
 
-		driver = WebDriverFactory.GetDriver(Browser.Chrome, options);
+		driver = WebDriverFactory.GetDriver(browser, options);
 		indexPage = new IndexPage(driver);
 	}
 
@@ -62,24 +65,47 @@ public class EpamPageTests
 		Assert.That(actual, Is.EqualTo(expected));
 	}
 
-	[Test]
-	[TestCase("BLOCKCHAIN", true)]
-	[TestCase("Automation", false)]
-	[TestCase("Cloud", true)]
-	public void FindLinks_AllElementsContainPhrase(string phrase, bool expected)
+	[TestCase("BLOCKCHAIN", "Cloud", true)]
+	public void FindLinks_AllElementsContainPhrase(string phrase1, string phrase2, bool expected)
 	{
 		indexPage = new IndexPage(driver);
 		indexPage.Open().AcceptCookies();
 
-		//searchPage = indexPage.Search(phrase);
 		searchPage = indexPage
 			.ClickSearchIcon()
 			.WaitForSearchPanel()
-			.EnterSearchPhrase(phrase)
+			.EnterSearchPhrase(phrase1)
 			.ClickFindButton()
 			.NavigateToSearchPage();
 
-		bool areLinksFound = searchPage.FindLinks(phrase.ToLower());
+		bool areLinksFound = searchPage.FindLinks(phrase1.ToLower());
+		Assert.That(areLinksFound, Is.EqualTo(expected));
+
+		searchPage = searchPage.GoBack()
+			.ClickSearchIcon()
+			.WaitForSearchPanel()
+			.EnterSearchPhrase(phrase2)
+			.ClickFindButton()
+			.NavigateToSearchPage();
+
+		areLinksFound = searchPage.FindLinks(phrase2.ToLower());
+		Assert.That(areLinksFound, Is.EqualTo(expected));
+	}
+
+	[TestCase("Automation", false)]
+	public void FindLinks_NotAllElementsContainPhrase(string phrase1, bool expected)
+	{
+		indexPage = new IndexPage(driver);
+		indexPage.Open().AcceptCookies();
+
+		searchPage = indexPage
+			.ClickSearchIcon()
+			.WaitForSearchPanel()
+			.EnterSearchPhrase(phrase1)
+			.ClickFindButton()
+			.NavigateToSearchPage();
+
+		bool areLinksFound = searchPage.FindLinks(phrase1.ToLower());
 
 		Assert.That(areLinksFound, Is.EqualTo(expected));
 	}

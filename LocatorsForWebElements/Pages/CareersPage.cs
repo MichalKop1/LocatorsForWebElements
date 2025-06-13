@@ -118,7 +118,7 @@ public class CareersPage
 			return element.Enabled ? element : null;
 		});
 		altbuttonApply.Click();
-
+		driver.Navigate().Refresh();
 		return this;
 	}
 
@@ -132,6 +132,7 @@ public class CareersPage
 
 			return lang.Displayed;
 		});
+		driver.Manage().Window.Maximize();
 
 		var domString = driver.FindElement(JobListingTextLocator).Text;
 
