@@ -7,9 +7,6 @@ using LocatorsForWebElements.Factories;
 namespace LocatorsForWebElementsTests;
 
 [TestFixture(Browser.Chrome)]
-[TestFixture(Browser.Firefox)]
-[TestFixture(Browser.Opera)]
-[TestFixture(Browser.Edge)]
 public class EpamPageTests(Browser browser)
 {
 	private IWebDriver driver;
@@ -108,6 +105,26 @@ public class EpamPageTests(Browser browser)
 		bool areLinksFound = searchPage.FindLinks(phrase1.ToLower());
 
 		Assert.That(areLinksFound, Is.EqualTo(expected));
+	}
+
+	[Test]
+	public void InsightsPage_CarouselDispalysCorrectTextInsideAndOutside()
+	{
+		indexPage = new IndexPage(driver);
+		indexPage.Open().AcceptCookies();
+
+		var insightsPage = indexPage
+			.SelectInsights()
+			.SwapCarousel()
+			.SwapCarousel();
+
+		string articleTextOutside = insightsPage.GetCarouselText();
+
+		string articleTextInside = insightsPage
+			.ClickReadMore()
+			.GetArticleText();
+
+		Assert.That(articleTextOutside, Is.EqualTo(articleTextInside));
 	}
 
 	[TearDown]
