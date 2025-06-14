@@ -1,4 +1,4 @@
-﻿namespace LocatorsForWebElements.Helpers;
+﻿namespace Core.Core;
 
 public enum Browser
 {

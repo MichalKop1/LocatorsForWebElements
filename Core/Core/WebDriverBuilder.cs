@@ -1,9 +1,10 @@
-﻿using OpenQA.Selenium;
+﻿using Core.Core;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 
-namespace LocatorsForWebElements.Helpers;
+namespace Core.Core;
 
 public class WebDriverBuilder
 {

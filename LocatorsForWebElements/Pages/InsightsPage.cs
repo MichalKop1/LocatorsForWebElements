@@ -8,13 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocatorsForWebElements.Pages;
+namespace Business.Pages;
 
 public class InsightsPage
 {
 	private readonly IWebDriver driver;
 
-	private readonly static By CouruselLocator = By.ClassName("slider__slide");
 	private readonly static By CarouselTextLocator = By.XPath("//*[@id=\"main\"]/div[1]/div[1]/div/div[1]/div[1]/div/div[6]/div/div/div/div[1]/div[2]/div/p/span");
 	private readonly static By CarouselRightButtonLocator = By.ClassName("slider__right-arrow");
 	private readonly static By CarouselReadMoreLocator = By.PartialLinkText("Read More");

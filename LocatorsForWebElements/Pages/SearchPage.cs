@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocatorsForWebElements.Pages;
+namespace Business.Pages;
 
 public class SearchPage
 {

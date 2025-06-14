@@ -4,10 +4,11 @@ using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocatorsForWebElements.Pages;
+namespace Business.Pages;
 
 public class AboutPage
 {
@@ -32,16 +33,18 @@ public class AboutPage
 		return this;
 	}
 
-	public AboutPage ClickDownloadButton()
+	public AboutPage ClickDownloadButton(string pathToFile)
 	{
 		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-		var downloadButton = driver.FindElement(DownloadButtonLocator);
-		var a = wait.Until(drv =>
+		//var downloadButton = driver.FindElement(DownloadButtonLocator);
+		var downloadButton = wait.Until(drv =>
 		{
 			var element = drv.FindElement(DownloadButtonLocator);
 			return element.Displayed ? element : null;
 		});
 		downloadButton.Click();
+
+		wait.Until(_ => File.Exists(pathToFile));
 
 		return this;
 	}

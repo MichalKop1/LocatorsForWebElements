@@ -1,26 +1,35 @@
-﻿using OpenQA.Selenium;
-using LocatorsForWebElements.Pages;
+﻿using Core.Core;
+using Business.Pages;
+using log4net;
+using log4net.Config;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using LocatorsForWebElements.Helpers;
-using LocatorsForWebElements.Factories;
+using NUnit.Framework.Interfaces;
 
 namespace LocatorsForWebElementsTests;
 
 [TestFixture(Browser.Edge)]
 public class EpamPageTests(Browser browser)
 {
-	private IWebDriver driver;
+	private LoggingWebDriver driver;
+
+	protected ILog Log
+	{
+		get { return LogManager.GetLogger(this.GetType()); }
+	}
 
 	[SetUp]
 	public void Setup()
 	{
+		XmlConfigurator.Configure(new FileInfo("Log.config"));
+
 		var optionsBuilder = new WebDriverBuilder();
 		var options = optionsBuilder
 			.Incognito()
 			.DownloadReady()
 			.Build(browser);
 
-		driver = WebDriverFactory.GetDriver(browser, options);
+		driver = new(WebDriverFactory.GetDriver(browser, options));
 	}
 
 	[TestCase("EPAM_Corporate_Overview_Q4FY-2024.pdf")]
@@ -35,7 +44,7 @@ public class EpamPageTests(Browser browser)
 		indexPage
 			.SelectAbout()
 			.ScrollToDownloadButton()
-			.ClickDownloadButton();
+			.ClickDownloadButton(fullPath);
 
 		Assert.That(File.Exists(fullPath), Is.True);
 	}
@@ -63,6 +72,15 @@ public class EpamPageTests(Browser browser)
 	[TearDown]
 	public void TearDown()
 	{
+		if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
+		{
+			Log.Error("Test failed: " + TestContext.CurrentContext.Test.FullName);
+			Log.Error("Error message: " + TestContext.CurrentContext.Result.Message);
+		}
+		else
+		{
+			Log.Info("Test passed: " + TestContext.CurrentContext.Test.FullName);
+		}
 		WebDriverFactory.QuitDriver();
 	}
 

@@ -5,7 +5,7 @@ using OpenQA.Selenium.Support.UI;
 using System;
 using SeleniumExtras.WaitHelpers;
 
-namespace LocatorsForWebElements.Pages;
+namespace Business.Pages;
 
 public class IndexPage
 {
