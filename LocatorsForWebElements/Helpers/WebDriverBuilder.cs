@@ -11,6 +11,7 @@ public class WebDriverBuilder
 	private bool incognito;
 	private bool maximized;
 	private bool minimized;
+	private bool downloadReady;
 
 	public WebDriverBuilder Headless()
 	{
@@ -36,6 +37,12 @@ public class WebDriverBuilder
 		return this;
 	}
 
+	public WebDriverBuilder DownloadReady()
+	{
+		downloadReady = true;
+		return this;
+	}
+
 	public DriverOptions Build(Browser browser)
 	{
 		DriverOptions options;
@@ -47,6 +54,16 @@ public class WebDriverBuilder
 				if (incognito) chromeOptions.AddArgument("--incognito");
 				if (maximized) chromeOptions.AddArgument("--start-maximized");
 				if (minimized) chromeOptions.AddArgument("--start-minimized");
+				if (downloadReady)
+				{
+					chromeOptions.AddUserProfilePreference("download.default_directory", "F:\\downloader");
+					chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
+					chromeOptions.AddUserProfilePreference("download.directory_upgrade", true);
+					chromeOptions.AddUserProfilePreference("safebrowsing.enabled", false);
+					chromeOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
+					chromeOptions.AddUserProfilePreference("profile.default_content_settings.popups", 0);
+				}
+				
 				options = chromeOptions;
 				break;
 
@@ -65,6 +82,15 @@ public class WebDriverBuilder
 				if (incognito) edgeOptions.AddArgument("--inPrivate");
 				if (maximized) edgeOptions.AddArgument("--start-maximized");
 				if (minimized) edgeOptions.AddArgument("--start-minimized");
+				if (downloadReady)
+				{
+					edgeOptions.AddUserProfilePreference("download.default_directory", "F:\\downloader");
+					edgeOptions.AddUserProfilePreference("download.prompt_for_download", false);
+					edgeOptions.AddUserProfilePreference("download.directory_upgrade", true);
+					edgeOptions.AddUserProfilePreference("safebrowsing.enabled", false);
+					edgeOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
+					edgeOptions.AddUserProfilePreference("profile.default_content_settings.popups", 0);
+				}
 				options = edgeOptions;
 				break;
 

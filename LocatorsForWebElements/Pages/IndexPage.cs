@@ -15,6 +15,7 @@ public class IndexPage
 
 	private static readonly By AcceptCookiesLocator = By.Id("onetrust-accept-btn-handler");
 	private static readonly By CareerButtonLocator = By.LinkText("Careers");
+	private static readonly By AboutButtonLocator = By.LinkText("About");
 	private static readonly By InsightsButtonLocator = By.LinkText("Insights");
 	private static readonly By SearchIconLocator = By.ClassName("search-icon");
 	private static readonly By SearchPanelLocator = By.XPath("//div[contains(@class, 'header-search__panel') and contains(@style, 'display: block')]");
@@ -68,6 +69,15 @@ public class IndexPage
 		insightsButton.Click();
 
 		return new InsightsPage(driver);
+	}
+
+	public AboutPage SelectAbout()
+	{
+		var insightsButton = driver.FindElement(AboutButtonLocator);
+
+		insightsButton.Click();
+
+		return new AboutPage(driver);
 	}
 
 	public IndexPage ClickSearchIcon()
