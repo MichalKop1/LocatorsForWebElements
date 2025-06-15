@@ -73,6 +73,7 @@ public class WebDriverBuilder
 				if (incognito) firefoxOptions.AddArgument("-private");
 				if (maximized) firefoxOptions.AddArgument("--start-maximized");
 				if (minimized) firefoxOptions.AddArgument("--start-minimized");
+
 				options = firefoxOptions;
 				break;
 
@@ -90,6 +91,7 @@ public class WebDriverBuilder
 					edgeOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
 					edgeOptions.AddUserProfilePreference("profile.default_content_settings.popups", 0);
 				}
+
 				options = edgeOptions;
 				break;
 
@@ -99,6 +101,14 @@ public class WebDriverBuilder
 				if (incognito) operaOptions.AddArgument("--incognito");
 				if (maximized) operaOptions.AddArgument("--start-maximized");
 				if (minimized) operaOptions.AddArgument("--start-minimized");
+				if (downloadReady)
+				{
+					operaOptions.AddUserProfilePreference("download.prompt_for_download", false);
+					operaOptions.AddUserProfilePreference("download.directory_upgrade", true);
+					operaOptions.AddUserProfilePreference("safebrowsing.enabled", false);
+					operaOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
+					operaOptions.AddUserProfilePreference("profile.default_content_settings.popups", 0);
+				}
 				options = operaOptions;
 				break;
 

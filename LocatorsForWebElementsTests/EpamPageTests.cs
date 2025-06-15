@@ -55,7 +55,4 @@ public class EpamPageTests : BaseTest
 
 		Assert.That(articleTextOutside, Is.EqualTo(articleTextInside));
 	}
-
-	
-
 }

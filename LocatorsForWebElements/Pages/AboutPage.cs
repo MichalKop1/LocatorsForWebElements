@@ -47,5 +47,4 @@ public class AboutPage
 
 		return this;
 	}
-
 }
