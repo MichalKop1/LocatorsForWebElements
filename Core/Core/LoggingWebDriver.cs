@@ -15,6 +15,11 @@ public class LoggingWebDriver : IWebDriver, IActionExecutor
 		get { return LogManager.GetLogger(GetType()); }
 	}
 
+	public IWebDriver Driver
+	{
+		get { return driver; }
+	}
+
 	public LoggingWebDriver(IWebDriver driver)
 	{
 		this.driver = driver ?? throw new ArgumentNullException(nameof(driver));

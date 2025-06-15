@@ -36,7 +36,6 @@ public class AboutPage
 	public AboutPage ClickDownloadButton(string pathToFile)
 	{
 		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-		//var downloadButton = driver.FindElement(DownloadButtonLocator);
 		var downloadButton = wait.Until(drv =>
 		{
 			var element = drv.FindElement(DownloadButtonLocator);

@@ -5,38 +5,18 @@ using log4net.Config;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using NUnit.Framework.Interfaces;
+using Tests;
 
 namespace LocatorsForWebElementsTests;
 
-[TestFixture(Browser.Edge)]
-public class EpamPageTests(Browser browser)
+[TestFixture]
+public class EpamPageTests : BaseTest
 {
-	private LoggingWebDriver driver;
-
-	protected ILog Log
-	{
-		get { return LogManager.GetLogger(this.GetType()); }
-	}
-
-	[SetUp]
-	public void Setup()
-	{
-		XmlConfigurator.Configure(new FileInfo("Log.config"));
-
-		var optionsBuilder = new WebDriverBuilder();
-		var options = optionsBuilder
-			.Incognito()
-			.DownloadReady()
-			.Build(browser);
-
-		driver = new(WebDriverFactory.GetDriver(browser, options));
-	}
-
 	[TestCase("EPAM_Corporate_Overview_Q4FY-2024.pdf")]
 	public void AboutPage_DownloadFile_Success(string fileName)
 	{
-		string pathToDesktop = "F:\\downloader";
-		string fullPath = Path.Combine(pathToDesktop, fileName);
+		string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+		string fullPath = Path.Combine(downloadsPath, fileName);
 
 		var indexPage = new IndexPage(driver);
 		indexPage.Open().AcceptCookies();
@@ -46,7 +26,13 @@ public class EpamPageTests(Browser browser)
 			.ScrollToDownloadButton()
 			.ClickDownloadButton(fullPath);
 
-		Assert.That(File.Exists(fullPath), Is.True);
+		bool fileExists = File.Exists(fullPath);
+		if (fileExists)
+		{
+			File.Delete(fullPath);
+		}
+
+		Assert.That(fileExists, Is.True);
 	}
 	
 	[Test]
@@ -65,23 +51,11 @@ public class EpamPageTests(Browser browser)
 		string articleTextInside = insightsPage
 			.ClickReadMore()
 			.GetArticleText();
+		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
 
 		Assert.That(articleTextOutside, Is.EqualTo(articleTextInside));
 	}
 
-	[TearDown]
-	public void TearDown()
-	{
-		if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
-		{
-			Log.Error("Test failed: " + TestContext.CurrentContext.Test.FullName);
-			Log.Error("Error message: " + TestContext.CurrentContext.Result.Message);
-		}
-		else
-		{
-			Log.Info("Test passed: " + TestContext.CurrentContext.Test.FullName);
-		}
-		WebDriverFactory.QuitDriver();
-	}
+	
 
 }

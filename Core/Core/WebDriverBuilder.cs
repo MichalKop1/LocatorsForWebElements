@@ -57,7 +57,6 @@ public class WebDriverBuilder
 				if (minimized) chromeOptions.AddArgument("--start-minimized");
 				if (downloadReady)
 				{
-					chromeOptions.AddUserProfilePreference("download.default_directory", "F:\\downloader");
 					chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
 					chromeOptions.AddUserProfilePreference("download.directory_upgrade", true);
 					chromeOptions.AddUserProfilePreference("safebrowsing.enabled", false);
@@ -85,7 +84,6 @@ public class WebDriverBuilder
 				if (minimized) edgeOptions.AddArgument("--start-minimized");
 				if (downloadReady)
 				{
-					edgeOptions.AddUserProfilePreference("download.default_directory", "F:\\downloader");
 					edgeOptions.AddUserProfilePreference("download.prompt_for_download", false);
 					edgeOptions.AddUserProfilePreference("download.directory_upgrade", true);
 					edgeOptions.AddUserProfilePreference("safebrowsing.enabled", false);
