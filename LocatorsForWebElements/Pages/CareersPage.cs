@@ -47,7 +47,6 @@ public class CareersPage
 		return this;
 	}
 
-
 	private void EnterKeyword(string codingLanguage)
 	{
 		var keywordSearchField = driver.FindElement(KeywordSearchFieldLocator);
