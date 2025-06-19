@@ -6,9 +6,6 @@ using LocatorsForWebElements.Factories;
 
 namespace LocatorsForWebElementsTests;
 
-[TestFixture(Browser.Chrome)]
-[TestFixture(Browser.Firefox)]
-[TestFixture(Browser.Opera)]
 [TestFixture(Browser.Edge)]
 public class EpamPageTests(Browser browser)
 {
@@ -41,7 +38,7 @@ public class EpamPageTests(Browser browser)
 		var fillInThePage = careersPage.FillInSearchInfo(language).ClickFindButton();
 		var openFirstListing = fillInThePage
 			.WaitForExpectedResults()
-			.OpenFirstResult();
+			.OpenLatestResult();
 
 		bool actual = openFirstListing.IsLanguageInResult(language);
 

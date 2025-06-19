@@ -17,13 +17,12 @@ public class CareersPage
 	private static readonly By KeywordSearchFieldLocator = By.Id("new_form_job_search-keyword");
 	private static readonly By DropDownMenuLocator = By.ClassName("select2-selection--single");
 	private static readonly By AllLocationsLiLocator = By.XPath(".//li[contains(text(), 'All Locations')]");
-	private static readonly By RemoteWorkCheckBoxLocator = By.CssSelector("label[for='id-93414a92-598f-316d-b965-9eb0dfefa42d-remote']");
+	private static readonly By RemoteWorkCheckBoxLocator = By.CssSelector("fieldset div p[class='job-search__filter-items job-search__filter-items--remote'] label");
 	private static readonly By FindButtonLocator = By.ClassName("small-button-text");
 	private static readonly By AllItemsLocator = By.TagName("li");
 	private static readonly By DisplayedListLocator = By.ClassName("search-result__list");
 	private static readonly By AltButtonApplyLocator = By.PartialLinkText("VIEW");
 	private static readonly By LanguageNameLocator = By.TagName("article");
-	private static readonly By JobListingTextLocator = By.Id("main");
 	private static readonly By ErrorMessageLocator = By.ClassName("search-result__error-message-23");
 
 	public CareersPage(IWebDriver driver)
@@ -65,7 +64,15 @@ public class CareersPage
 
 	private void SelectRemoteWork()
 	{
-		var remoteWorkCheckBox = driver.FindElement(RemoteWorkCheckBoxLocator);
+		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+
+		//var remoteWorkCheckBox = driver.FindElement(RemoteWorkCheckBoxLocator);
+		var remoteWorkCheckBox = wait.Until(d =>
+		{
+			var checkbox = d.FindElement(RemoteWorkCheckBoxLocator);
+			return checkbox.Displayed ? checkbox : null;
+		});
+
 		remoteWorkCheckBox.Click();
 	}
 
@@ -108,17 +115,19 @@ public class CareersPage
 		return this;
 	}
 
-	public CareersPage OpenFirstResult()
+	public CareersPage OpenLatestResult()
 	{
 		WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
-		var altbuttonApply = wait.Until(d =>
+		var altbuttonsApply = wait.Until(d =>
 		{
-			var element = d.FindElement(AltButtonApplyLocator);
-			return element.Enabled ? element : null;
+			var elements = d.FindElements(AltButtonApplyLocator);
+			return elements.Count > 0 ? elements : null;
 		});
-		altbuttonApply.Click();
-		driver.Navigate().Refresh();
+
+		int jobListingsCount = altbuttonsApply.Count;
+		int elementOffset = 2;
+		altbuttonsApply.ElementAt(jobListingsCount - elementOffset).Click();
 		return this;
 	}
 
@@ -126,15 +135,13 @@ public class CareersPage
 	{
 		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
-		wait.Until(drv =>
-		{
-			var lang = drv.FindElement(LanguageNameLocator);
-
-			return lang.Displayed;
-		});
 		driver.Manage().Window.Maximize();
 
-		var domString = driver.FindElement(JobListingTextLocator).Text;
+		var domString = wait.Until(drv =>
+		{
+			var lang = drv.FindElement(LanguageNameLocator);
+			return lang.Displayed ? lang : null;
+		}).Text;
 
 		return domString.Contains(codingLanguage);
 	}

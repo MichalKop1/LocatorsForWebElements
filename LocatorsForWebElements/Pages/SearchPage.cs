@@ -14,7 +14,7 @@ public class SearchPage
 {
 	private readonly IWebDriver driver;
 
-	private static readonly By ItemListLocator = By.XPath("//*[@id=\"main\"]/div[1]/div/section/div[2]/div[4]/section/div[3]/article");
+	private static readonly By ItemListLocator = By.ClassName("search-results__items");
 
 	public SearchPage(IWebDriver driver)
 	{
