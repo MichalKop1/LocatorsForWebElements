@@ -14,12 +14,10 @@ public class IndexPage
 	private readonly IWebDriver driver;
 
 	private static readonly By AcceptCookiesLocator = By.Id("onetrust-accept-btn-handler");
-	private static readonly By CareerButtonLocator = By.LinkText("Careers");
-	private static readonly By AboutButtonLocator = By.LinkText("About");
+	private static readonly By CareerButtonLocator = By.LinkText("Careers"); private static readonly By AboutButtonLocator = By.LinkText("About");
 	private static readonly By InsightsButtonLocator = By.LinkText("Insights");
-	private static readonly By SearchIconLocator = By.ClassName("search-icon");
-	private static readonly By SearchPanelLocator = By.XPath("//div[contains(@class, 'header-search__panel') and contains(@style, 'display: block')]");
-	private static readonly By SearchInputLocator = By.Name("q");
+	private static readonly By SearchIconLocator = By.ClassName("search-icon"); private static readonly By SearchPanelLocator = By.XPath("//div[contains(@class, 'header-search__panel') and contains(@style, 'display: block')]");
+	private static readonly By SearchInputLocator = By.Id("new_form_search");
 	private static readonly By FindButtonLocator = By.XPath(".//*[@class='search-results__input-holder']/following-sibling::button");
 
 	public IndexPage(IWebDriver driver)
