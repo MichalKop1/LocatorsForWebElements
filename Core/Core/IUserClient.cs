@@ -1,9 +1,11 @@
 ﻿using Business.Models;
+using RestSharp;
 using System.Net;
 
 namespace Core.Core;
 
 public interface IUserClient
 {
-	Task<(List<User>, HttpStatusCode statusCode)> GetUsersAsync();
+	Task<RestResponse<List<User>>> GetUsersAsync();
+	Task<RestResponse<User>> PostUserAsync(User user);
 }

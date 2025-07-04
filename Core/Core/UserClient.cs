@@ -24,11 +24,21 @@ public class UserClient : IUserClient
 			configureSerialization: s => s.UseSystemTextJson(serializerOptions));
 	}
 
-	public async Task<(List<User>, HttpStatusCode statusCode)> GetUsersAsync()
+	public async Task<RestResponse<List<User>>> GetUsersAsync()
 	{
 		var request = new RestRequest("/users", Method.Get);
 		var response = await _client.ExecuteAsync<List<User>>(request);
 
-		return (response.Data ?? new(), response.StatusCode);
+		return response;
+	}
+
+	public async Task<RestResponse<User>> PostUserAsync(User user)
+	{
+		var request = new RestRequest("/users", Method.Post);
+		request.AddJsonBody(user);
+
+		var response = await _client.ExecuteAsync<User>(request);
+
+		return response;
 	}
 }
