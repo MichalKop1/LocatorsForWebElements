@@ -3,14 +3,15 @@ using RestSharp.Serializers.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Business.Models;
+using System.Net;
 
 namespace Core.Core;
 
-public class BaseClient
+public class UserClient : IUserClient
 {
 	private readonly IRestClient _client;
 
-	public BaseClient(string endpoint)
+	public UserClient(string endpoint)
 	{
 		var serializerOptions = new JsonSerializerOptions()
 		{
@@ -23,11 +24,11 @@ public class BaseClient
 			configureSerialization: s => s.UseSystemTextJson(serializerOptions));
 	}
 
-	public async Task<List<User>> GetUsersAsync()
+	public async Task<(List<User>, HttpStatusCode statusCode)> GetUsersAsync()
 	{
 		var request = new RestRequest("/users", Method.Get);
-		var response = await _client.GetAsync<List<User>>(request);
+		var response = await _client.ExecuteAsync<List<User>>(request);
 
-		return response ?? new();
+		return (response.Data ?? new(), response.StatusCode);
 	}
 }
