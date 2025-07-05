@@ -24,6 +24,7 @@ public class UserFixture
 	}
 
 	[Test]
+	[Category("API")]
 	public async Task VerifyThatUsersCanBeRetrieved()
 	{
 		var response = await userClient.GetUsersAsync();
@@ -44,6 +45,7 @@ public class UserFixture
 	}
 
 	[TestCase("Content-Type=application/json; charset=utf-8")]
+	[Category("API")]
 	public async Task VerifyResponseHeadersOfUsers(string expected)
 	{
 		var response = await userClient.GetUsersAsync();
@@ -53,6 +55,7 @@ public class UserFixture
 	}
 
 	[TestCase(10)]
+	[Category("API")]
 	public async Task VerifyThatExpectedNumberOfUsersAreReturned(int expected)
 	{
 		var response = await userClient.GetUsersAsync();
@@ -71,6 +74,7 @@ public class UserFixture
 	}
 
 	[TestCase("testName", "testUsername")]
+	[Category("API")]
 	public async Task VerifyThatUserCanBeCreated(string name, string username)
 	{
 		var user = new User()
@@ -87,6 +91,7 @@ public class UserFixture
 	}
 
 	[TestCase("https://jsonplaceholder.typicode.com/invalidendpoint")]
+	[Category("API")]
 	public async Task VerifyNotFoundReturnedForInvalidEndpoint(string url)
 	{
 		var client = new RestFactory()
