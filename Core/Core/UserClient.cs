@@ -11,6 +11,11 @@ public class UserClient : IUserClient
 {
 	private readonly IRestClient _client;
 
+	public UserClient(IRestClient client)
+	{
+		_client = client;
+	}
+
 	public UserClient(string endpoint)
 	{
 		var serializerOptions = new JsonSerializerOptions()

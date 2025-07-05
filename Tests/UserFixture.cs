@@ -9,7 +9,19 @@ namespace Tests;
 [Parallelizable(ParallelScope.Children)]
 public class UserFixture
 {
-	private readonly UserClient userClient = new(Constants.BaseUrl);
+	private UserClient userClient;
+	private IRestClient client;
+
+	[OneTimeSetUp]
+	public void OneTimeSetUp()
+	{
+		client = new RestFactory()
+			.WithJsonSerializer()
+			.WithRequest("/users")
+			.Create(Constants.BaseUrl);
+			
+		userClient = new UserClient(client);
+	}
 
 	[Test]
 	public async Task VerifyThatUsersCanBeRetrieved()
@@ -50,7 +62,7 @@ public class UserFixture
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(users.Select(u => u.Id).Distinct(), Is.EqualTo(users.Count));
+			Assert.That(users.Select(u => u.Id).Distinct().Count(), Is.EqualTo(users.Count));
 			Assert.That(users.All(u => !string.IsNullOrEmpty(u.Name)));
 			Assert.That(users.All(u => !string.IsNullOrEmpty(u.Username)));
 		});
@@ -72,6 +84,26 @@ public class UserFixture
 		Assert.That(response, Is.Not.Null);
 		Assert.That(response.Data.Id, Is.Positive);
 		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+	}
 
+	[TestCase("https://jsonplaceholder.typicode.com/invalidendpoint")]
+	public async Task VerifyNotFoundReturnedForInvalidEndpoint(string url)
+	{
+		var client = new RestFactory()
+			.WithJsonSerializer()
+			.WithRequest("/users")
+			.Create(url);
+
+		var userClient = new UserClient(client);
+		var response = await userClient.GetUsersAsync();
+
+		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+	}
+
+	[OneTimeTearDown]
+	public void OneTimeTearDown()
+	{
+		client.Dispose();
+		userClient = null!;
 	}
 }
