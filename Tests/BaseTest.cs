@@ -3,9 +3,7 @@ using Core.Common;
 using Core.Core;
 using log4net;
 using log4net.Config;
-using NUnit.Framework;
 using RestSharp;
-using System.Net;
 
 namespace Tests;
 
@@ -25,7 +23,7 @@ public abstract class BaseTest
 		log4net.Util.LogLog.InternalDebugging = true;
 		XmlConfigurator.Configure(new FileInfo("Log.config"));
 
-		client = new RestFactory()
+		client = new RestBuilder()
 			.WithJsonSerializer()
 			.WithRequest("/users")
 			.Create(Constants.BaseUrl);
@@ -33,11 +31,11 @@ public abstract class BaseTest
 		userClient = new UserClient(client);
 	}
 
-
 	[OneTimeTearDown]
 	public void OneTimeTearDown()
 	{
 		client.Dispose();
+		userClient.Dispose();
 		userClient = null!;
 	}
 }

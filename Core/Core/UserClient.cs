@@ -1,18 +1,20 @@
-﻿using RestSharp;
+﻿using Business.Models;
+using log4net;
+using RestSharp;
+using RestSharp.Authenticators;
 using RestSharp.Serializers.Json;
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Business.Models;
-using System.Net;
-using log4net;
 
 namespace Core.Core;
 
-public class UserClient : IUserClient
+public class UserClient : IUserClient, IDisposable
 {
 	private readonly IRestClient _client;
-	protected ILog Log => LogManager.GetLogger(this.GetType());
+	
 
+	protected ILog Log => LogManager.GetLogger(this.GetType());
 
 	public UserClient(IRestClient client)
 	{
@@ -61,5 +63,13 @@ public class UserClient : IUserClient
 		}
 
 		return response;
+	}
+
+	
+
+	public void Dispose()
+	{
+		Log.Info("Disposing UserClient.");
+		_client?.Dispose();
 	}
 }

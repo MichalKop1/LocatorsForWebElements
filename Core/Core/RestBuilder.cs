@@ -6,14 +6,15 @@ using System.Text.Json.Serialization;
 
 namespace Core.Core;
 
-public class RestFactory
+public class RestBuilder
 {
 	private IRestClient _client;
 	private RestRequest _request;
 	private JsonSerializerOptions _serializerOptions;
+
 	protected ILog Log => LogManager.GetLogger(this.GetType());
 
-	static RestFactory()
+	static RestBuilder()
 	{
 		log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("Log.config"));
 	}
@@ -44,8 +45,15 @@ public class RestFactory
 		return _client;
 	}
 
-	public RestFactory WithRequest(string resource)
+	public RestBuilder WithRequest(string resource)
 	{
+		if (_client == null)
+		{
+			var errorMessage = "RestClient must be created before setting up a request.";
+			Log.Error(errorMessage);
+			throw new InvalidOperationException(errorMessage);
+		}
+
 		if (string.IsNullOrWhiteSpace(resource))
 		{
 			var errorMessage = "Resource cannot be null or empty.";
@@ -65,7 +73,32 @@ public class RestFactory
 		return this;
 	}
 
-	public RestFactory WithJsonSerializer()
+	public RestBuilder WithParameter(string name, string value)
+	{
+		if (_request == null)
+		{
+			var errorMessage = "Request must be set up before adding parameters.";
+			Log.Error(errorMessage);
+			throw new InvalidOperationException(errorMessage);
+		}
+		else if (string.IsNullOrWhiteSpace(name))
+		{
+			var errorMessage = "Parameter name cannot be null or empty.";
+			Log.Error(errorMessage);
+			throw new ArgumentException(errorMessage, nameof(name));
+		}
+		else if (string.IsNullOrEmpty(name))
+		{
+			var errorMessage = "Parameter value cannot be null.";
+			Log.Error(errorMessage);
+			throw new ArgumentNullException(nameof(value), errorMessage);
+		}
+
+		_request.AddParameter(name, value);
+		return this;
+	}
+
+	public RestBuilder WithJsonSerializer()
 	{
 		var message = $"Setting up Json Serializer options: Json Ignore when writing null and property name case insensitive";
 		Log.Info(message);
@@ -78,9 +111,23 @@ public class RestFactory
 		return this;
 	}
 
-	public RestFactory WithHeader(string name, string value)
+	public RestBuilder WithHeader(string name, string value)
 	{
+		if (string.IsNullOrWhiteSpace(name))
+		{
+			var errorMessage = "Header name cannot be null or empty.";
+			Log.Error(errorMessage);
+			throw new ArgumentException(errorMessage, nameof(name));
+		}
+		else if (string.IsNullOrEmpty(value))
+		{
+			var errorMessage = "Header value cannot be null.";
+			Log.Error(errorMessage);
+			throw new ArgumentNullException(nameof(value), errorMessage);
+		}
+
 		var message = $"Adding header. Name: {name} | Value: {value}";
+		Log.Info(message);
 		_request.AddHeader(name, value);
 		return this;
 	}

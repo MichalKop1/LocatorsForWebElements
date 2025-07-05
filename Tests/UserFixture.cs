@@ -15,7 +15,7 @@ public class UserFixture
 	[OneTimeSetUp]
 	public void OneTimeSetUp()
 	{
-		client = new RestFactory()
+		client = new RestBuilder()
 			.WithJsonSerializer()
 			.WithRequest("/users")
 			.Create(Constants.BaseUrl);
@@ -94,7 +94,7 @@ public class UserFixture
 	[Category("API")]
 	public async Task VerifyNotFoundReturnedForInvalidEndpoint(string url)
 	{
-		var client = new RestFactory()
+		var client = new RestBuilder()
 			.WithJsonSerializer()
 			.WithRequest("/users")
 			.Create(url);
