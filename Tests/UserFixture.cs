@@ -1,32 +1,22 @@
-﻿using NUnit.Framework;
-using Core.Core;
+﻿using Business.Models;
 using Core.Common;
-using RestSharp;
+using Core.Core;
 using System.Net;
-using Business.Models;
 namespace Tests;
 
 [Parallelizable(ParallelScope.Children)]
 public class UserFixture
 {
-	private UserClient userClient;
-	private IRestClient client;
-
-	[OneTimeSetUp]
-	public void OneTimeSetUp()
-	{
-		client = new RestBuilder()
-			.WithJsonSerializer()
-			.WithRequest("/users")
-			.Create(Constants.BaseUrl);
-			
-		userClient = new UserClient(client);
-	}
-
 	[Test]
 	[Category("API")]
 	public async Task VerifyThatUsersCanBeRetrieved()
 	{
+		var client = new RestBuilder()
+			.WithJsonSerializer()
+			.Create(Constants.BaseUrl);
+		var userClient = new UserClient(client);
+
+
 		var response = await userClient.GetUsersAsync();
 		var users = response.Data;
 
@@ -48,6 +38,11 @@ public class UserFixture
 	[Category("API")]
 	public async Task VerifyResponseHeadersOfUsers(string expected)
 	{
+		var client = new RestBuilder()
+			.WithJsonSerializer()
+			.Create(Constants.BaseUrl);
+		var userClient = new UserClient(client);
+
 		var response = await userClient.GetUsersAsync();
 
 		Assert.That(response.ContentHeaders.First().ToString(), Is.EqualTo(expected));
@@ -58,6 +53,11 @@ public class UserFixture
 	[Category("API")]
 	public async Task VerifyThatExpectedNumberOfUsersAreReturned(int expected)
 	{
+		var client = new RestBuilder()
+			.WithJsonSerializer()
+			.Create(Constants.BaseUrl);
+		var userClient = new UserClient(client);
+
 		var response = await userClient.GetUsersAsync();
 		var users = response.Data;
 
@@ -77,6 +77,11 @@ public class UserFixture
 	[Category("API")]
 	public async Task VerifyThatUserCanBeCreated(string name, string username)
 	{
+		var client = new RestBuilder()
+			.WithJsonSerializer()
+			.Create(Constants.BaseUrl);
+		var userClient = new UserClient(client);
+
 		var user = new User()
 		{
 			Name = name,
@@ -96,19 +101,11 @@ public class UserFixture
 	{
 		var client = new RestBuilder()
 			.WithJsonSerializer()
-			.WithRequest("/users")
 			.Create(url);
 
 		var userClient = new UserClient(client);
 		var response = await userClient.GetUsersAsync();
 
 		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-	}
-
-	[OneTimeTearDown]
-	public void OneTimeTearDown()
-	{
-		client.Dispose();
-		userClient = null!;
 	}
 }

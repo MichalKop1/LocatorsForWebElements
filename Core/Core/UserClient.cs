@@ -1,18 +1,14 @@
 ﻿using Business.Models;
 using log4net;
 using RestSharp;
-using RestSharp.Authenticators;
-using RestSharp.Serializers.Json;
 using System.Net;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Core.Core;
 
 public class UserClient : IUserClient, IDisposable
 {
 	private readonly IRestClient _client;
-	
+	private bool _disposed;
 
 	protected ILog Log => LogManager.GetLogger(this.GetType());
 
@@ -36,7 +32,7 @@ public class UserClient : IUserClient, IDisposable
 		else
 		{
 			var message = $"Successfully retrieved {response.Data.Count} users.";
-			Log.Info($"Successfully retrieved {response.Data.Count} users.");
+			Log.Info(message);
 		}
 
 		return response;
@@ -44,7 +40,7 @@ public class UserClient : IUserClient, IDisposable
 
 	public async Task<RestResponse<User>> PostUserAsync(User user)
 	{
-		var message = $"Posting user {user.Id}.{user.Username}";
+		var message = $"Posting user {user.Username}";
 		Log.Info(message);
 		var request = new RestRequest("/users", Method.Post);
 		request.AddJsonBody(user);
@@ -65,11 +61,23 @@ public class UserClient : IUserClient, IDisposable
 		return response;
 	}
 
-	
+	protected virtual void Dispose(bool disposing)
+	{
+		if (!_disposed)
+		{
+			if (disposing)
+			{
+				Log.Info("Disposing UserClient.");
+				_client?.Dispose();
+			}
+
+			_disposed = true;
+		}
+	}
 
 	public void Dispose()
 	{
-		Log.Info("Disposing UserClient.");
-		_client?.Dispose();
+		Dispose(true);
+		GC.SuppressFinalize(this);
 	}
 }
