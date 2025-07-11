@@ -22,10 +22,10 @@ public class RestBuilder
 
 	public RestBuilder()
 	{
-		_defaultClientRequests.Add("DefaultHeader", new List<(string, string)>());
-		_defaultClientRequests.Add("DefaultParameter", new List<(string, string)>());
-		_defaultClientRequests.Add("DefaultQueryParameter", new List<(string, string)>());
-		_defaultClientRequests.Add("DefaultUrlSegment", new List<(string, string)>());
+		_defaultClientRequests.Add(DefaultHeader, new List<(string, string)>());
+		_defaultClientRequests.Add(DefaultParameter, new List<(string, string)>());
+		_defaultClientRequests.Add(DefaultQueryParameter, new List<(string, string)>());
+		_defaultClientRequests.Add(DefaultUrlSegment, new List<(string, string)>());
 	}
 
 	static RestBuilder()

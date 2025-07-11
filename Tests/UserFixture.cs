@@ -11,15 +11,16 @@ public class UserFixture
 	[Category("API")]
 	public async Task VerifyThatUsersCanBeRetrieved()
 	{
+		// try DI container
 		var client = new RestBuilder()
 			.WithJsonSerializer()
 			.Create(Constants.BaseUrl);
 		var userClient = new UserClient(client);
 
-
 		var response = await userClient.GetUsersAsync();
 		var users = response.Data;
 
+		// try smart assertions
 		Assert.Multiple(() =>
 		{
 			Assert.That(users.All(u => u.Id > 0));
