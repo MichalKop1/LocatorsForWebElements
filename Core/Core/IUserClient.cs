@@ -6,6 +6,6 @@ namespace Core.Core;
 
 public interface IUserClient
 {
-	Task<RestResponse<List<User>>> GetUsersAsync();
-	Task<RestResponse<User>> PostUserAsync(User user);
+	Task<RestResponse<List<User>>> GetUsersAsync(RestRequest request);
+	Task<RestResponse<User>> PostUserAsync(User user, RestRequest request);
 }

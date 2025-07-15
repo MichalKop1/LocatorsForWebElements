@@ -18,10 +18,10 @@ public class UserClient : IUserClient, IDisposable
 		_client = client;
 	}
 
-	public async Task<RestResponse<List<User>>> GetUsersAsync()
+	public async Task<RestResponse<List<User>>> GetUsersAsync(RestRequest request)
 	{
 		Log.Info("Retrieving users from the API.");
-		var request = new RestRequest("/users", Method.Get);
+		//var request = new RestRequest("/users", Method.Get);
 		var response = await _client.ExecuteAsync<List<User>>(request);
 
 		if (response.StatusCode != HttpStatusCode.OK)
@@ -38,11 +38,11 @@ public class UserClient : IUserClient, IDisposable
 		return response;
 	}
 
-	public async Task<RestResponse<User>> PostUserAsync(User user)
+	public async Task<RestResponse<User>> PostUserAsync(User user, RestRequest request)
 	{
 		var message = $"Posting user {user.Username}";
 		Log.Info(message);
-		var request = new RestRequest("/users", Method.Post);
+		//var request = new RestRequest("/users", Method.Post);
 		request.AddJsonBody(user);
 
 		var response = await _client.ExecuteAsync<User>(request);
