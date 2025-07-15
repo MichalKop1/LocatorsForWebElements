@@ -1,4 +1,4 @@
-﻿namespace Core.Common;
+﻿namespace Tests.TestData;
 
 public static class Constants
 {

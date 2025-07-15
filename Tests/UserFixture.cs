@@ -1,13 +1,13 @@
 ﻿using Business.Models;
-using Core.Common;
 using Core.Core;
 using System.Net;
+using Tests.TestData;
 namespace Tests;
 
 [Parallelizable(ParallelScope.Children)]
 public class UserFixture
 {
-	[Test]
+	[TestCase()]
 	[Category("API")]
 	public async Task VerifyThatUsersCanBeRetrieved()
 	{
@@ -19,6 +19,7 @@ public class UserFixture
 
 		var response = await userClient.GetUsersAsync();
 		var users = response.Data;
+		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
 		// try smart assertions
 		Assert.Multiple(() =>
@@ -33,6 +34,7 @@ public class UserFixture
 			Assert.That(users.All(u => u.Company != null));
 		});
 		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+		Assert.That(errMessagesExist, Is.False);
 	}
 
 	[TestCase("Content-Type=application/json; charset=utf-8")]
@@ -45,9 +47,11 @@ public class UserFixture
 		var userClient = new UserClient(client);
 
 		var response = await userClient.GetUsersAsync();
+		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
 		Assert.That(response.ContentHeaders.First().ToString(), Is.EqualTo(expected));
 		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+		Assert.That(errMessagesExist, Is.False);
 	}
 
 	[TestCase(10)]
@@ -61,6 +65,7 @@ public class UserFixture
 
 		var response = await userClient.GetUsersAsync();
 		var users = response.Data;
+		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
 		Assert.That(users.Count, Is.EqualTo(expected));
 
@@ -72,6 +77,7 @@ public class UserFixture
 		});
 
 		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+		Assert.That(errMessagesExist, Is.False);
 	}
 
 	[TestCase("testName", "testUsername")]
@@ -90,10 +96,12 @@ public class UserFixture
 		};
 
 		var response = await userClient.PostUserAsync(user);
+		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
 		Assert.That(response, Is.Not.Null);
 		Assert.That(response.Data.Id, Is.Positive);
 		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+		Assert.That(errMessagesExist, Is.False);
 	}
 
 	[TestCase("https://jsonplaceholder.typicode.com/invalidendpoint")]
@@ -106,7 +114,10 @@ public class UserFixture
 
 		var userClient = new UserClient(client);
 		var response = await userClient.GetUsersAsync();
+		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
 		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+		Assert.That(response.Data, Is.Null);
+		Assert.That(errMessagesExist, Is.True);
 	}
 }
