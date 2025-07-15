@@ -1,4 +1,5 @@
 ﻿using Core.Core;
+using Core.Enums;
 using log4net;
 using log4net.Config;
 using NUnit.Framework;
@@ -22,7 +23,7 @@ public abstract class BaseTest
 	{
 		XmlConfigurator.Configure(new FileInfo("Log.config"));
 
-		Browser browser = BrowserJasonParser.GetBrowserType();
+		Browser browser = BrowserJsonParser.GetBrowserType();
 
 		var optionsBuilder = new WebDriverBuilder();
 		var options = optionsBuilder
@@ -30,7 +31,7 @@ public abstract class BaseTest
 			.DownloadReady()
 			.Build(browser);
 
-		driver = new(WebDriverFactory.GetDriver(browser, options));
+		driver = WebDriverFactory.GetDriver(browser, options);
 	}
 
 	[TearDown]
@@ -38,13 +39,16 @@ public abstract class BaseTest
 	{
 		if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
 		{
-			Log.Error("Test failed: " + TestContext.CurrentContext.Test.FullName);
-			Log.Error("Error message: " + TestContext.CurrentContext.Result.Message);
+			Log.Error($"Test failed: {TestContext.CurrentContext.Test.FullName}");
+			Log.Error($"Error message: {TestContext.CurrentContext.Result.Message}");
 		}
 		else
 		{
-			Log.Info("Test passed: " + TestContext.CurrentContext.Test.FullName);
+			Log.Info($"Test passed: {TestContext.CurrentContext.Test.FullName}");
 		}
+
+		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
+
 		WebDriverFactory.QuitDriver();
 	}
 }

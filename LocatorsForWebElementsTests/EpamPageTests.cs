@@ -1,10 +1,6 @@
 ﻿using Core.Core;
 using Business.Pages;
-using log4net;
-using log4net.Config;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using NUnit.Framework.Interfaces;
 using Tests;
 
 namespace LocatorsForWebElementsTests;

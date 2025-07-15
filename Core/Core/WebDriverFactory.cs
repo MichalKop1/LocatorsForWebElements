@@ -2,7 +2,8 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Edge;
-using Core.Core;
+using Core.Enums;
+
 
 namespace Core.Core;
 
@@ -10,7 +11,7 @@ public static class WebDriverFactory
 {
 	private static IWebDriver instance;
 
-	public static IWebDriver GetDriver(Browser browser)
+	public static LoggingWebDriver GetDriver(Browser browser)
 	{
 		if (instance == null)
 		{
@@ -23,10 +24,10 @@ public static class WebDriverFactory
 			};
 		}
 
-		return instance;
+		return new LoggingWebDriver(instance);
 	}
 
-	public static IWebDriver GetDriver(Browser browser, DriverOptions options)
+	public static LoggingWebDriver GetDriver(Browser browser, DriverOptions options)
 	{
 		ArgumentNullException.ThrowIfNull(options);
 
@@ -41,7 +42,7 @@ public static class WebDriverFactory
 			};
 		}
 
-		return instance;
+		return new LoggingWebDriver(instance);
 	}
 
 	public static void QuitDriver()

@@ -1,4 +1,4 @@
-﻿namespace Core.Core;
+﻿namespace Core.Enums;
 
 public enum Browser
 {

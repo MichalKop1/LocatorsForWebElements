@@ -1,9 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using Core.Core;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace Core.Core
 {

@@ -1,4 +1,4 @@
-﻿using Core.Core;
+﻿using Core.Enums;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
@@ -46,76 +46,61 @@ public class WebDriverBuilder
 
 	public DriverOptions Build(Browser browser)
 	{
-		DriverOptions options;
-		switch (browser)
+		return browser switch
 		{
-			case Browser.Chrome:
-				var chromeOptions = new ChromeOptions();
-				if (headless) chromeOptions.AddArgument("--headless");
-				if (incognito) chromeOptions.AddArgument("--incognito");
-				if (maximized) chromeOptions.AddArgument("--start-maximized");
-				if (minimized) chromeOptions.AddArgument("--start-minimized");
-				if (downloadReady)
-				{
-					chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
-					chromeOptions.AddUserProfilePreference("download.directory_upgrade", true);
-					chromeOptions.AddUserProfilePreference("safebrowsing.enabled", false);
-					chromeOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
-					chromeOptions.AddUserProfilePreference("profile.default_content_settings.popups", 0);
-				}
-				
-				options = chromeOptions;
-				break;
+			Browser.Chrome => ConfigureChromeOptions(),
+			Browser.Firefox => ConfigureFirefoxOptions(),
+			Browser.Edge => ConfigureEdgeOptions(),
+			Browser.Opera => ConfigureOperaOptions(),
+			_ => throw new ArgumentException("Unsupported browser")
+		};
+	}
 
-			case Browser.Firefox:
-				var firefoxOptions = new FirefoxOptions();
-				if (headless) firefoxOptions.AddArgument("-headless");
-				if (incognito) firefoxOptions.AddArgument("-private");
-				if (maximized) firefoxOptions.AddArgument("--start-maximized");
-				if (minimized) firefoxOptions.AddArgument("--start-minimized");
-
-				options = firefoxOptions;
-				break;
-
-			case Browser.Edge:
-				var edgeOptions = new EdgeOptions();
-				if (headless) edgeOptions.AddArgument("--headless");
-				if (incognito) edgeOptions.AddArgument("--inPrivate");
-				if (maximized) edgeOptions.AddArgument("--start-maximized");
-				if (minimized) edgeOptions.AddArgument("--start-minimized");
-				if (downloadReady)
-				{
-					edgeOptions.AddUserProfilePreference("download.prompt_for_download", false);
-					edgeOptions.AddUserProfilePreference("download.directory_upgrade", true);
-					edgeOptions.AddUserProfilePreference("safebrowsing.enabled", false);
-					edgeOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
-					edgeOptions.AddUserProfilePreference("profile.default_content_settings.popups", 0);
-				}
-
-				options = edgeOptions;
-				break;
-
-			case Browser.Opera:
-				var operaOptions = new ChromeOptions();
-				if (headless) operaOptions.AddArgument("--headless");
-				if (incognito) operaOptions.AddArgument("--incognito");
-				if (maximized) operaOptions.AddArgument("--start-maximized");
-				if (minimized) operaOptions.AddArgument("--start-minimized");
-				if (downloadReady)
-				{
-					operaOptions.AddUserProfilePreference("download.prompt_for_download", false);
-					operaOptions.AddUserProfilePreference("download.directory_upgrade", true);
-					operaOptions.AddUserProfilePreference("safebrowsing.enabled", false);
-					operaOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
-					operaOptions.AddUserProfilePreference("profile.default_content_settings.popups", 0);
-				}
-				options = operaOptions;
-				break;
-
-			default:
-				throw new ArgumentException("Unsuported browser");
-		}
-
+	private ChromeOptions ConfigureChromeOptions()
+	{
+		var options = new ChromeOptions();
+		ApplyCommonOptions(options);
 		return options;
 	}
+
+	private FirefoxOptions ConfigureFirefoxOptions()
+	{
+		var options = new FirefoxOptions();
+		if (headless) options.AddArgument("-headless");
+		if (incognito) options.AddArgument("-private");
+		if (maximized) options.AddArgument("--start-maximized");
+		if (minimized) options.AddArgument("--start-minimized");
+		return options;
+	}
+
+	private EdgeOptions ConfigureEdgeOptions()
+	{
+		var options = new EdgeOptions();
+		ApplyCommonOptions(options);
+		return options;
+	}
+
+	private ChromeOptions ConfigureOperaOptions()
+	{
+		var options = new ChromeOptions();
+		ApplyCommonOptions(options);
+		return options;
+	}
+
+	private void ApplyCommonOptions(dynamic options)
+	{
+		if (headless) options.AddArgument("--headless");
+		if (incognito) options.AddArgument(options is EdgeOptions ? "--inPrivate" : "--incognito");
+		if (maximized) options.AddArgument("--start-maximized");
+		if (minimized) options.AddArgument("--start-minimized");
+		if (downloadReady)
+		{
+			options.AddUserProfilePreference("download.prompt_for_download", false);
+			options.AddUserProfilePreference("download.directory_upgrade", true);
+			options.AddUserProfilePreference("safebrowsing.enabled", false);
+			options.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
+			options.AddUserProfilePreference("profile.default_content_settings.popups", 0);
+		}
+	}
 }
+

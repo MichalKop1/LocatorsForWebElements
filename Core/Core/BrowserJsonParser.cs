@@ -1,23 +1,26 @@
-﻿using System;
-using System.IO;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Core.Common;
+using Core.Enums;
 using log4net;
 
 namespace Core.Core;
 
-public static class BrowserJasonParser
+public static class BrowserJsonParser
 {
-    private static ILog Log = LogManager.GetLogger(typeof(BrowserJasonParser));
+    private static ILog Log = LogManager.GetLogger(typeof(BrowserJsonParser));
 	public static Browser GetBrowserType()
     {
         string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Common/TestConfig.json");
         string json = File.ReadAllText(path);
-        var configRoot = JsonSerializer.Deserialize<TestConfigRoot>(json);
+        var configRoot = JsonSerializer.Deserialize<TestConfig>(json);
 
-        string browserString = configRoot?.Config?.Browser ?? "Edge";
+        string browserString = configRoot?.Browser;
+
         if (Enum.TryParse<Browser>(browserString, true, out var browserEnum))
         {
+            var browserMessage = $"Browser set to: {browserEnum}";
+			Log.Info(browserMessage);
+
 			return browserEnum;
 		}
 
