@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium;
 using LocatorsForWebElements.Pages;
-using OpenQA.Selenium.Chrome;
 using LocatorsForWebElements.Helpers;
 using LocatorsForWebElements.Factories;
 
@@ -26,8 +25,8 @@ public class EpamPageTests(Browser browser)
 	[TestCase("EPAM_Corporate_Overview_Q4FY-2024.pdf")]
 	public void AboutPage_DownloadFile_Success(string fileName)
 	{
-		string pathToDesktop = "F:\\downloader";
-		string fullPath = Path.Combine(pathToDesktop, fileName);
+		string pathToFolder = "F:\\downloader";
+		string fullPath = Path.Combine(pathToFolder, fileName);
 
 		var indexPage = new IndexPage(driver);
 		indexPage.Open().AcceptCookies();
@@ -38,6 +37,7 @@ public class EpamPageTests(Browser browser)
 			.ClickDownloadButton();
 
 		Assert.That(File.Exists(fullPath), Is.True);
+		File.Delete(fullPath);
 	}
 	
 	[Test]
@@ -48,8 +48,7 @@ public class EpamPageTests(Browser browser)
 
 		var insightsPage = indexPage
 			.SelectInsights()
-			.SwapCarousel()
-			.SwapCarousel();
+			.SwapCarousel(2);
 
 		string articleTextOutside = insightsPage.GetCarouselText();
 
