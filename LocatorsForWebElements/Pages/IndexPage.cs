@@ -1,9 +1,6 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
-using System;
-using SeleniumExtras.WaitHelpers;
 
 namespace Business.Pages;
 
@@ -21,10 +18,17 @@ public class IndexPage
 	private static readonly By SearchPanelLocator = By.XPath("//div[contains(@class, 'header-search__panel') and contains(@style, 'display: block')]");
 	private static readonly By SearchInputLocator = By.Id("new_form_search");
 	private static readonly By FindButtonLocator = By.XPath(".//*[@class='search-results__input-holder']/following-sibling::button");
+	private static readonly By ServicesButtonLocator = By.LinkText("Services");
 
 	public IndexPage(IWebDriver driver)
 	{
 		this.driver = driver ?? throw new ArgumentException(nameof(driver));
+	}
+
+	public IndexPage Open(string link)
+	{
+		driver.Url = link;
+		return this;
 	}
 
 	public IndexPage Open()
@@ -60,6 +64,15 @@ public class IndexPage
 		careerButton.Click();
 
 		return new CareersPage(driver);
+	}
+
+	public ServicesPage SelectServices()
+	{
+		var careerButton = driver.FindElement(ServicesButtonLocator);
+
+		careerButton.Click();
+
+		return new ServicesPage(driver);
 	}
 
 	public InsightsPage SelectInsights()

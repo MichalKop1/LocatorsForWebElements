@@ -1,8 +1,7 @@
 ﻿using Core.Core;
-using Business.Pages;
 using OpenQA.Selenium;
 using Tests;
-using SpecFlowTests.Pages;
+using Business.Pages;
 
 namespace LocatorsForWebElementsTests;
 
@@ -15,7 +14,7 @@ public class EpamPageTests : BaseTest
 		string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
 		string fullPath = Path.Combine(downloadsPath, fileName);
 
-		var indexPage = new Business.Pages.IndexPage(driver);
+		var indexPage = new IndexPage(driver);
 		indexPage.Open().AcceptCookies();
 
 		indexPage
@@ -35,7 +34,7 @@ public class EpamPageTests : BaseTest
 	[Test]
 	public void InsightsPage_CarouselDispalysCorrectTextInsideAndOutside()
 	{
-		var indexPage = new Business.Pages.IndexPage(driver);
+		var indexPage = new IndexPage(driver);
 		indexPage.Open().AcceptCookies();
 
 		var insightsPage = indexPage

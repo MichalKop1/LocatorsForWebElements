@@ -3,37 +3,36 @@ using log4net;
 using log4net.Config;
 using Reqnroll;
 
-namespace SpecFlowTests.Steps
+namespace SpecFlowTests.Steps;
+
+[Binding]
+public abstract class BasePageSteps
 {
-	[Binding]
-	public abstract class BasePageSteps
+	protected LoggingWebDriver driver;
+
+	protected ILog Log
 	{
-		protected LoggingWebDriver driver;
+		get { return LogManager.GetLogger(this.GetType()); }
+	}
 
-		protected ILog Log
-		{
-			get { return LogManager.GetLogger(this.GetType()); }
-		}
+	[BeforeScenario]
+	public void Setup()
+	{
+		XmlConfigurator.Configure(new FileInfo("Log.config"));
 
-		[BeforeScenario]
-		public void Setup()
-		{
-			XmlConfigurator.Configure(new FileInfo("Log.config"));
+		Browser browser = BrowserJasonParser.GetBrowserType();
 
-			Browser browser = BrowserJasonParser.GetBrowserType();
+		var optionsBuilder = new WebDriverBuilder();
+		var options = optionsBuilder
+			.Incognito()
+			.Build(browser);
 
-			var optionsBuilder = new WebDriverBuilder();
-			var options = optionsBuilder
-				.Incognito()
-				.Build(browser);
+		driver = new(WebDriverFactory.GetDriver(browser, options));
+	}
 
-			driver = new(WebDriverFactory.GetDriver(browser, options));
-		}
-
-		[AfterScenario]
-		public void TearDown()
-		{
-			WebDriverFactory.QuitDriver();
-		}
+	[AfterScenario]
+	public void TearDown()
+	{
+		WebDriverFactory.QuitDriver();
 	}
 }

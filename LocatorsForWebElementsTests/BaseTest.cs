@@ -1,13 +1,9 @@
 ﻿using Core.Core;
 using log4net;
 using log4net.Config;
-using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using OpenQA.Selenium;
-using OpenQA.Selenium.BiDi.Communication;
 
 namespace Tests;
-
 
 public abstract class BaseTest
 {

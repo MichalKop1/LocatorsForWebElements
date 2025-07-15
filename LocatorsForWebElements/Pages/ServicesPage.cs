@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace SpecFlowTests.Pages;
+namespace Business.Pages;
 
 public class ServicesPage(IWebDriver driver)
 {

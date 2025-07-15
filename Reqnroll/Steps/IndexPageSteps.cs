@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Reqnroll;
-using SpecFlowTests.Pages;
+using Business.Pages;
 
 namespace SpecFlowTests.Steps;
 
