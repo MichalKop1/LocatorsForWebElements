@@ -11,11 +11,11 @@ namespace Tests;
 [Parallelizable(ParallelScope.Children)]
 public class UserFixture : BaseFixture
 {
-	[TestCase()]
+	[TestCase("users")]
 	[Category("API")]
-	public async Task VerifyThatUsersCanBeRetrieved()
+	public async Task VerifyThatUsersCanBeRetrieved(string endpoint)
 	{
-		var request = new RequestBuilder("users")
+		var request = new RequestBuilder(endpoint)
 			.Build();
 
 		var response = await userClient.GetUsersAsync(request);
@@ -38,48 +38,49 @@ public class UserFixture : BaseFixture
 		errMessagesExist.Should().BeFalse();
 	}
 
-	[TestCase("Content-Type=application/json; charset=utf-8")]
+	[TestCase("users", "Content-Type=application/json; charset=utf-8")]
 	[Category("API")]
-	public async Task VerifyResponseHeadersOfUsers(string expected)
+	public async Task VerifyResponseHeadersOfUsers(string endpoint, string expected)
 	{
-		var request = new RequestBuilder("users")
+		var request = new RequestBuilder(endpoint)
 			.Build();
 
 		var response = await userClient.GetUsersAsync(request);
 		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
-		Assert.That(response.ContentHeaders.First().ToString(), Is.EqualTo(expected));
-		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-		Assert.That(errMessagesExist, Is.False);
+		response.ContentHeaders.First().ToString().Should().Be(expected);
+		response.StatusCode.Should().Be(HttpStatusCode.OK);
+		errMessagesExist.Should().BeFalse();
+
 	}
 
-	[TestCase(10)]
+	[TestCase("users",10)]
 	[Category("API")]
-	public async Task VerifyThatExpectedNumberOfUsersAreReturned(int expected)
+	public async Task VerifyThatExpectedNumberOfUsersAreReturned(string endpoint, int expected)
 	{
-		var request = new RequestBuilder("users")
+		var request = new RequestBuilder(endpoint)
 			.Build();
 
 		var response = await userClient.GetUsersAsync(request);
 		var users = response.Data;
 		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
-		Assert.That(users.Count, Is.EqualTo(expected));
+		users.Count.Should().Be(expected);
 
-		Assert.Multiple(() =>
+		using (new AssertionScope())
 		{
-			Assert.That(users.Select(u => u.Id).Distinct().Count(), Is.EqualTo(users.Count));
-			Assert.That(users.All(u => !string.IsNullOrEmpty(u.Name)));
-			Assert.That(users.All(u => !string.IsNullOrEmpty(u.Username)));
-		});
+			users.Select(u => u.Id).Distinct().Count().Should().Be(users.Count);
+			users.All(u => !string.IsNullOrEmpty(u.Name)).Should().BeTrue();
+			users.All(u => !string.IsNullOrEmpty(u.Username)).Should().BeTrue();
+		}
 
-		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-		Assert.That(errMessagesExist, Is.False);
+		response.StatusCode.Should().Be(HttpStatusCode.OK);
+		errMessagesExist.Should().BeFalse();
 	}
 
-	[TestCase("testName", "testUsername")]
+	[TestCase("users","testName", "testUsername")]
 	[Category("API")]
-	public async Task VerifyThatUserCanBeCreated(string name, string username)
+	public async Task VerifyThatUserCanBeCreated(string endpoint, string name, string username)
 	{
 		var user = new User()
 		{
@@ -87,7 +88,7 @@ public class UserFixture : BaseFixture
 			Username = username,
 		};
 
-		var request = new RequestBuilder("users")
+		var request = new RequestBuilder(endpoint)
 			.WithJsonBody(user)
 			.WithMethod(Method.Post)
 			.Build();
@@ -95,10 +96,10 @@ public class UserFixture : BaseFixture
 		var response = await userClient.PostUserAsync(user, request);
 		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
-		Assert.That(response, Is.Not.Null);
-		Assert.That(response.Data.Id, Is.Positive);
-		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
-		Assert.That(errMessagesExist, Is.False);
+		response.Should().NotBeNull();
+		response.Data.Id.Should().BePositive();
+		response.StatusCode.Should().Be(HttpStatusCode.Created);
+		errMessagesExist.Should().BeFalse();
 	}
 
 	[TestCase("/invalidendpoint")]
@@ -111,8 +112,8 @@ public class UserFixture : BaseFixture
 		var response = await userClient.GetUsersAsync(request);
 		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
-		Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-		Assert.That(response.Data, Is.Null);
-		Assert.That(errMessagesExist, Is.True);
+		response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+		response.Data.Should().BeNull();
+		errMessagesExist.Should().BeTrue();
 	}
 }

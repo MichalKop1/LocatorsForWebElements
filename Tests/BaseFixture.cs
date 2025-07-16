@@ -1,9 +1,4 @@
 ﻿using Core.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests;
 
@@ -20,7 +15,6 @@ public abstract class BaseFixture
 
 		userClient = new UserClient(client);
 	}
-
 
 	[OneTimeTearDown]
 	public void TearDown()
