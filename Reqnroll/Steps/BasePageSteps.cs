@@ -1,6 +1,7 @@
 ﻿using Core.Core;
 using log4net;
 using log4net.Config;
+using OpenQA.Selenium.Chrome;
 using Reqnroll;
 
 namespace SpecFlowTests.Steps;
@@ -27,12 +28,12 @@ public abstract class BasePageSteps
 			.Incognito()
 			.Build(browser);
 
-		driver = new(WebDriverFactory.GetDriver(browser, options));
+		driver = new(WebDriverFactory.GetChromeDriver((ChromeOptions)options));
 	}
 
 	[AfterScenario]
 	public void TearDown()
 	{
-		WebDriverFactory.QuitDriver();
+		driver.Quit();
 	}
 }

@@ -5,8 +5,7 @@ using FluentAssertions.Execution;
 using RestSharp;
 using System.Net;
 
-
-namespace Tests;
+namespace RestTests;
 
 [Parallelizable(ParallelScope.Children)]
 public class UserFixture : BaseFixture

@@ -1,6 +1,6 @@
 ﻿using Core.Core;
 
-namespace Tests;
+namespace RestTests;
 
 public abstract class BaseFixture
 {

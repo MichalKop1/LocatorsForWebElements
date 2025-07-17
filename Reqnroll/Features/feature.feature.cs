@@ -105,6 +105,7 @@ namespace SpecFlowTests.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Navigate to Services Section")]
         [NUnit.Framework.TestCaseAttribute("https://www.epam.com/", "GENERATIVE AI", null)]
+        [NUnit.Framework.TestCaseAttribute("https://www.epam.com/", "RESPONSIBLE AI", null)]
         public async global::System.Threading.Tasks.Task NavigateToServicesSection(string link, string title, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -113,7 +114,7 @@ namespace SpecFlowTests.Features
             argumentsOfScenario.Add("title", title);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Navigate to Services Section", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 3
-  this.ScenarioInitialize(scenarioInfo);
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
             {
@@ -132,48 +133,9 @@ namespace SpecFlowTests.Features
   await testRunner.AndAsync("I click on the \"ARTIFICIAL INTELLIGENCE\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 8
-  await testRunner.AndAsync("I click on the \"GENERATIVE AI\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+  await testRunner.AndAsync(string.Format("I click on the {0} link", title), ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 9
- await testRunner.ThenAsync(string.Format("I should see the {0} title", title), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Navigate to Responsible AI Section")]
-        [NUnit.Framework.TestCaseAttribute("https://www.epam.com/", "RESPONSIBLE AI", null)]
-        public async global::System.Threading.Tasks.Task NavigateToResponsibleAISection(string link, string title, string[] exampleTags)
-        {
-            string[] tagsOfScenario = exampleTags;
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            argumentsOfScenario.Add("link", link);
-            argumentsOfScenario.Add("title", title);
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Navigate to Responsible AI Section", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 15
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 17
-    await testRunner.GivenAsync(string.Format("I am on the {0} page", link), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 18
-    await testRunner.WhenAsync("I click on the \"Services\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 19
-  await testRunner.AndAsync("I click on the \"ARTIFICIAL INTELLIGENCE\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 20
-  await testRunner.AndAsync("I click on the \"RESPONSIBLE AI\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 21
  await testRunner.ThenAsync(string.Format("I should see the {0} title", title), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

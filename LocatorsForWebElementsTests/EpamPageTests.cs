@@ -1,9 +1,8 @@
 ﻿using Core.Core;
 using OpenQA.Selenium;
-using Tests;
 using Business.Pages;
 
-namespace LocatorsForWebElementsTests;
+namespace WebDriverTests;
 
 [TestFixture]
 public class EpamPageTests : BaseTest

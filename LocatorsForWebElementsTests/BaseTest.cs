@@ -2,15 +2,17 @@
 using log4net;
 using log4net.Config;
 using NUnit.Framework.Interfaces;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
 
-namespace Tests;
+namespace WebDriverTests;
 
 public abstract class BaseTest
 {
 	protected LoggingWebDriver driver;
 	protected ILog Log
 	{
-		get { return LogManager.GetLogger(this.GetType()); }
+		get { return LogManager.GetLogger(GetType()); }
 	}
 
 	[SetUp]
@@ -26,7 +28,7 @@ public abstract class BaseTest
 			.DownloadReady()
 			.Build(browser);
 
-		driver = new(WebDriverFactory.GetDriver(browser, options));
+		driver = new(WebDriverFactory.GetEdgeDriver((EdgeOptions)options));
 	}
 
 	[TearDown]
@@ -41,6 +43,10 @@ public abstract class BaseTest
 		{
 			Log.Info("Test passed: " + TestContext.CurrentContext.Test.FullName);
 		}
-		WebDriverFactory.QuitDriver();
+
+		if (driver != null)
+		{
+			driver.Quit();
+		}
 	}
 }
