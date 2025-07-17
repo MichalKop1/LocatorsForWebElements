@@ -1,0 +1,109 @@
+name: SauceDemo
+
+on:
+  pull_request:
+    branches: [ feature 5 ]
+  schedule:
+    - cron: '0 3 * * 1' # Run every Monday at 3:00 AM UT
+  workflow_dispatch:           
+    inputs:
+      browser: 
+        description: 'Browser to run UI tests against'  
+        required: true                                
+        default: 'chrome'                             
+        type: choice                                  
+        options:
+          - chrome                                     
+          - firefox                                   
+          - edge                                       
+
+jobs:
+  update-config:
+    runs-on: windows-latest
+    env:
+      Browser: ${{ github.event.inputs.browser }}
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v4
+
+    - name: install jq
+      run: choco install jq -y
+      shell: powershell
+
+    - name: update config filter
+      run: |
+        jq ".Browser = ""$env:BROWSER""" SauceDemo/appconfig.json > temp.json
+        Move-Item -Force temp.json SauceDemo/appconfig.json
+
+    - name: Log config
+      run: Get-Content SauceDemo/appconfig.json
+      shell: powershell
+
+  api-tests:
+    runs-on: windows-latest       
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'      
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --configuration Debug --no-restore
+
+      - name: Run API tests
+        run: |
+          dotnet test Tests/RestTests.csproj --filter Category=API --configuration Debug --no-build --logger "trx;LogFileName=api_test_results.trx"
+        continue-on-error: true
+
+      - name: Publish API test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-test-results
+          path: Tests/TestResults/
+
+
+  ui-tests:
+    runs-on: windows-latest
+    needs: api-tests
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'     
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --configuration Debug --no-restore
+
+      - name: Run UI tests
+        run: |
+          dotnet test LocatorsForWebElementsTests/WebDriverTests.csproj --configuration Debug --no-build --logger "trx;LogFileName=ui_test_results.trx"
+        continue-on-error: true
+
+      - name: Publish UI test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-results
+          path: SauceDemoTests/TestResults/
+
+      - name: Publish screenshots (if any)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: LocatorsForWebElementsTests/Screenshots/
