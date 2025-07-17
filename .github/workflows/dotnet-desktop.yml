@@ -1,4 +1,4 @@
-name: SauceDemo
+name: Epam Page Tests
 
 on:
   pull_request:
