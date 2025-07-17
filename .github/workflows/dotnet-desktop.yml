@@ -2,7 +2,7 @@ name: Epam Page Tests
 
 on:
   pull_request:
-    branches: [ feature 5 ]
+    branches: [ feature5 ]
   schedule:
     - cron: '0 3 * * 1' # Run every Monday at 3:00 AM UT
   workflow_dispatch:           
