@@ -32,11 +32,11 @@ jobs:
 
     - name: update config filter
       run: |
-        jq ".Browser = ""$env:BROWSER""" SauceDemo/appconfig.json > temp.json
-        Move-Item -Force temp.json SauceDemo/appconfig.json
+        jq ".Browser = ""$env:BROWSER""" LocatorsForWebElementsTests/Common/TestConfig.json > temp.json
+        Move-Item -Force temp.json LocatorsForWebElementsTests/Common/TestConfig.json
 
     - name: Log config
-      run: Get-Content SauceDemo/appconfig.json
+      run: Get-Content LocatorsForWebElementsTests/Common/TestConfig.json
       shell: powershell
 
   api-tests:
