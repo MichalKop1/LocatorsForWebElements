@@ -1,4 +1,5 @@
-﻿using Core.Core;
+﻿using Core.AltWebDriver;
+using Core.Core;
 using log4net;
 using log4net.Config;
 using OpenQA.Selenium.Chrome;
@@ -21,14 +22,13 @@ public abstract class BasePageSteps
 	{
 		XmlConfigurator.Configure(new FileInfo("Log.config"));
 
-		Browser browser = BrowserJasonParser.GetBrowserType();
-
-		var optionsBuilder = new WebDriverBuilder();
-		var options = optionsBuilder
+		WebDriverCreator create = WebDriverCreatorFactory.GetCreator();
+		driver = create
 			.Incognito()
-			.Build(browser);
-
-		driver = new(WebDriverFactory.GetChromeDriver((ChromeOptions)options));
+			.DownloadReady()
+			.Maximized()
+			.GetConfiguredWebDriver()
+			.AsLoggingWebDriver(); // extension method to convert the IWebDriver to LoggingWebDriver
 	}
 
 	[AfterScenario]

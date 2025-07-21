@@ -1,9 +1,8 @@
-﻿using Core.Core;
+﻿using Core.AltWebDriver;
+using Core.Core;
 using log4net;
 using log4net.Config;
 using NUnit.Framework.Interfaces;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Edge;
 
 namespace WebDriverTests;
 
@@ -19,16 +18,14 @@ public abstract class BaseTest
 	public void Setup()
 	{
 		XmlConfigurator.Configure(new FileInfo("Log.config"));
-
-		Browser browser = BrowserJasonParser.GetBrowserType();
-
-		var optionsBuilder = new WebDriverBuilder();
-		var options = optionsBuilder
+	
+		WebDriverCreator create = WebDriverCreatorFactory.GetCreator();
+		driver = create
 			.Incognito()
 			.DownloadReady()
-			.Build(browser);
-
-		driver = new(WebDriverFactory.GetEdgeDriver((EdgeOptions)options));
+			.Maximized()
+			.GetConfiguredWebDriver()
+			.AsLoggingWebDriver(); // extension method to convert the IWebDriver to LoggingWebDriver
 	}
 
 	[TearDown]
@@ -44,9 +41,6 @@ public abstract class BaseTest
 			Log.Info("Test passed: " + TestContext.CurrentContext.Test.FullName);
 		}
 
-		if (driver != null)
-		{
-			driver.Quit();
-		}
+		driver.Driver.Quit();
 	}
 }

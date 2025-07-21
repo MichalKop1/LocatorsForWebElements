@@ -6,27 +6,11 @@ using Core.Core;
 
 namespace Core.Core;
 
-public static class  WebDriverFactory
+
+
+public static class WebDriverFactory
 {
-	public static ChromeDriver GetChromeDriver(ChromeOptions? options = null)
-	{
-		return options == null ? new ChromeDriver() : new ChromeDriver(options);
-	}
-
-	public static FirefoxDriver GetFirefoxDriver(FirefoxOptions? options = null)
-	{
-		return options == null ? new FirefoxDriver() : new FirefoxDriver(options);
-	}
-
-	public static EdgeDriver GetEdgeDriver(EdgeOptions? options = null)
-	{
-		return options == null ? new EdgeDriver() : new EdgeDriver(options);
-	}
-}
-
-public static class WebDriver2
-{
-	public static IWebDriver GetDriver(DriverOptions? options)
+	public static IWebDriver GetDriver(DriverOptions? options = null)
 	{
 		Browser browser = BrowserJasonParser.GetBrowserType();
 
