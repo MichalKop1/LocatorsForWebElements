@@ -40,7 +40,7 @@ public abstract class BaseTest
 		{
 			Log.Info("Test passed: " + TestContext.CurrentContext.Test.FullName);
 		}
-
+		driver.Dispose();
 		driver.Driver.Quit();
 	}
 }

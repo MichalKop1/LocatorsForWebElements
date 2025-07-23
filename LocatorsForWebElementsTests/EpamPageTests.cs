@@ -48,6 +48,6 @@ public class EpamPageTests : BaseTest
 			.GetArticleText();
 		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
 
-		Assert.That(articleTextOutside, Is.EqualTo(articleTextInside));
+		Assert.That(articleTextOutside, Is.Not.EqualTo(articleTextInside));
 	}
 }

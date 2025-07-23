@@ -14,7 +14,8 @@ public class InsightsPage
 {
 	private readonly IWebDriver driver;
 
-	private readonly static By CarouselTextLocator = By.XPath("//*[@id=\"main\"]/div[1]/div[1]/div/div[1]/div[1]/div/div[6]/div/div/div/div[1]/div[2]/div/p/span");
+	private readonly static By CarouselTextLocatorr = By.XPath("//div[contains(@class,'single-slide__content-container')]//p[contains(@class, 'scaling-of-text-wrapper')]--");
+	// By.CssSelector(div  div div p span[class='font-size-60']);
 	private readonly static By CarouselRightButtonLocator = By.ClassName("slider__right-arrow");
 	private readonly static By CarouselReadMoreLocator = By.PartialLinkText("Read More");
 	private readonly static By ArticleTextLocator = By.CssSelector("span.font-size-80-33 > span.museo-sans-light");
@@ -35,13 +36,13 @@ public class InsightsPage
 
 	public string GetCarouselText()
 	{
-		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
 
 		var elementText = wait.Until(drv =>
 		{
-			var element = drv.FindElement(CarouselTextLocator);
+			var element = drv.FindElement(CarouselTextLocatorr);
 
-			return element.Displayed ? element : null;
+			return element.Displayed || element.Enabled ? element : null;
 		});
 
 		return elementText.Text;
