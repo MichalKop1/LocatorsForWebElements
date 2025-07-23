@@ -23,18 +23,21 @@ public class UserFixture : BaseFixture
 
 		using (new AssertionScope())
 		{
-			users.Should().OnlyContain(u => u.Id > 0, "all user IDs should be greater than 0");
-			users.Should().OnlyContain(u => !string.IsNullOrEmpty(u.Name), "all users should have a Name");
-			users.Should().OnlyContain(u => !string.IsNullOrEmpty(u.Username), "all users should have a Username");
-			users.Should().OnlyContain(u => !string.IsNullOrEmpty(u.Email), "all users should have an Email");
-			users.Should().OnlyContain(u => u.Address != null, "all users should have an Address");
-			users.Should().OnlyContain(u => !string.IsNullOrEmpty(u.Phone), "all users should have a Phone");
-			users.Should().OnlyContain(u => !string.IsNullOrEmpty(u.Website), "all users should have a Website");
-			users.Should().OnlyContain(u => u.Company != null, "all users should have a Company");
-		}
+			users.Should().AllSatisfy(u =>
+			{
+				u.Id.Should().BeGreaterThan(0, "all user IDs should be greater than 0");
+				u.Name.Should().NotBeNullOrEmpty("all users should have a Name");
+				u.Username.Should().NotBeNullOrEmpty("all users should have a Username");
+				u.Email.Should().NotBeNullOrEmpty("all users should have an Email");
+				u.Address.Should().NotBeNull("all users should have an Address");
+				u.Phone.Should().NotBeNullOrEmpty("all users should have a Phone");
+				u.Website.Should().NotBeNullOrEmpty("all users should have a Website");
+				u.Company.Should().NotBeNull("all users should have a Company");
+			});
 
-		response.StatusCode.Should().Be(HttpStatusCode.OK);
-		errMessagesExist.Should().BeFalse();
+			response.StatusCode.Should().Be(HttpStatusCode.OK);
+			errMessagesExist.Should().BeFalse();
+		}
 	}
 
 	[TestCase("users", "Content-Type=application/json; charset=utf-8")]
@@ -47,10 +50,12 @@ public class UserFixture : BaseFixture
 		var response = await userClient.GetUsersAsync(request);
 		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
-		response.ContentHeaders.First().ToString().Should().Be(expected);
-		response.StatusCode.Should().Be(HttpStatusCode.OK);
-		errMessagesExist.Should().BeFalse();
-
+		using (new AssertionScope())
+		{
+			response.ContentHeaders?.First().ToString().Should().Be(expected);
+			response.StatusCode.Should().Be(HttpStatusCode.OK);
+			errMessagesExist.Should().BeFalse();
+		}
 	}
 
 	[TestCase("users",10)]
@@ -64,17 +69,20 @@ public class UserFixture : BaseFixture
 		var users = response.Data;
 		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
-		users.Count.Should().Be(expected);
-
 		using (new AssertionScope())
 		{
-			users.Select(u => u.Id).Distinct().Count().Should().Be(users.Count);
-			users.All(u => !string.IsNullOrEmpty(u.Name)).Should().BeTrue();
-			users.All(u => !string.IsNullOrEmpty(u.Username)).Should().BeTrue();
-		}
+			users?.Count.Should().Be(expected);
 
-		response.StatusCode.Should().Be(HttpStatusCode.OK);
-		errMessagesExist.Should().BeFalse();
+			users.Should().AllSatisfy(u =>
+			{
+				u.Name.Should().NotBeNullOrEmpty();
+				u.Username.Should().NotBeNullOrEmpty();
+			});
+
+			users?.Select(u => u.Id).Should().OnlyHaveUniqueItems();
+			response.StatusCode.Should().Be(HttpStatusCode.OK);
+			errMessagesExist.Should().BeFalse();
+		}
 	}
 
 	[TestCase("users","testName", "testUsername")]
@@ -95,10 +103,13 @@ public class UserFixture : BaseFixture
 		var response = await userClient.PostUserAsync(user, request);
 		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
-		response.Should().NotBeNull();
-		response.Data.Id.Should().BePositive();
-		response.StatusCode.Should().Be(HttpStatusCode.Created);
-		errMessagesExist.Should().BeFalse();
+		using (new AssertionScope())
+		{
+			response.Should().NotBeNull();
+			response.Data?.Id.Should().BePositive();
+			response.StatusCode.Should().Be(HttpStatusCode.Created);
+			errMessagesExist.Should().BeFalse();
+		}
 	}
 
 	[TestCase("/invalidendpoint")]
@@ -111,8 +122,11 @@ public class UserFixture : BaseFixture
 		var response = await userClient.GetUsersAsync(request);
 		var errMessagesExist = response.ErrorMessage?.Length > 0;
 
-		response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-		response.Data.Should().BeNull();
-		errMessagesExist.Should().BeTrue();
+		using (new AssertionScope())
+		{
+			response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+			response.Data.Should().BeNull();
+			errMessagesExist.Should().BeTrue();
+		}		
 	}
 }
