@@ -1,3 +1,4 @@
 {
-    "Browser" :  "Edge"
+  "Browser": "Chrome",
+  "DownloadPath": "C:\\Downloads"
 }

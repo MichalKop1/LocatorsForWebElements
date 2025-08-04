@@ -3,6 +3,8 @@ using log4net;
 using log4net.Config;
 using NUnit.Framework.Interfaces;
 
+[assembly: XmlConfigurator(ConfigFile = "Common/Log.config", Watch = true)]
+
 namespace WebDriverTests;
 
 public abstract class BaseTest
@@ -20,8 +22,7 @@ public abstract class BaseTest
 	
 		WebDriverCreator create = WebDriverCreatorFactory.GetCreator();
 		driver = create
-			.Incognito()
-			.Headless()
+			//.Headless()
 			.Maximized()
 			.DownloadReady()
 			.GetConfiguredWebDriver()

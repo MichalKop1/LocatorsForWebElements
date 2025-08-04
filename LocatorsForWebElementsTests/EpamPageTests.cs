@@ -12,7 +12,7 @@ public class EpamPageTests : BaseTest
 	[TestCase("EPAM_Corporate_Overview_Q4FY-2024.pdf")]
 	public void AboutPage_DownloadFile_Success(string fileName)
 	{
-		string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+		string downloadsPath = JsonStringParser.GetConfig().DownloadPath;
 		string fullPath = Path.Combine(downloadsPath, fileName);
 
 		var indexPage = new IndexPage(driver);
@@ -22,7 +22,7 @@ public class EpamPageTests : BaseTest
 		indexPage
 			.SelectAbout()
 			.ScrollToDownloadButton()
-			.ClickDownloadButton(fullPath);
+			.ClickDownloadButton(downloadsPath, fileName);
 		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
 		bool fileExists = File.Exists(fullPath);
 		if (fileExists)

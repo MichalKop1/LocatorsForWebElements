@@ -65,7 +65,6 @@ public abstract class WebDriverCreator
 	/// </remarks>
 	public IWebDriver GetConfiguredWebDriver()
 	{
-		log4net.Config.XmlConfigurator.Configure(new FileInfo("Log.config"));
 		IWebDriver driver = CreateWebDriver();
 		return driver;
 	}
@@ -85,17 +84,8 @@ public abstract class WebDriverCreator
 			if (minimized) chromeOptions.AddArgument("--start-minimized");
 
 			chromeOptions.AddArgument("--profile-directory=Default");
-
 			chromeOptions.AddArgument("--no-first-run");
 			chromeOptions.AddArgument("--no-default-browser-check");
-
-			chromeOptions.AddArgument("--ignore-certificate-errors");
-			chromeOptions.AddArgument("--allow-running-insecure-content");
-			chromeOptions.AddArgument("--disable-extensions");
-			chromeOptions.AddArgument("--proxy-server='direct://'");
-			chromeOptions.AddArgument("--proxy-bypass-list=*");
-			chromeOptions.AddArgument("--no-sandbox");
-			chromeOptions.AddArgument("--disable-dev-shm-usage");
 
 			chromeOptions.AddArgument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36");
 			chromeOptions.AddArgument("--lang=en-US,en;q=0.9");
@@ -103,18 +93,21 @@ public abstract class WebDriverCreator
 			chromeOptions.AddArgument("--disable-webgl");
 			chromeOptions.AddArgument("--disable-features=IsolateOrigins,site-per-process");
 
+
+
 			chromeOptions.AddExcludedArgument("enable-automation");
 			chromeOptions.AddAdditionalOption("useAutomationExtension", false);
+			chromeOptions.AddArgument("--disable-blink-features");
 			chromeOptions.AddArgument("--disable-blink-features=AutomationControlled");
 
 			if (downloadReady)
 			{
 				chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
 				chromeOptions.AddUserProfilePreference("download.directory_upgrade", true);
-				chromeOptions.AddUserProfilePreference("safebrowsing.enabled", false);
+				chromeOptions.AddUserProfilePreference("safebrowsing.enabled", true);
 				chromeOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
 				chromeOptions.AddUserProfilePreference("profile.default_content_settings.popups", 0);
-				chromeOptions.AddUserProfilePreference("download.default_directory", "C:\\Downloads");
+				chromeOptions.AddUserProfilePreference("download.default_directory", $"{JsonStringParser.GetConfig().DownloadPath}");
 			}
 
 			chromeOptions.AddArgument("--disable-infobars");
@@ -144,7 +137,17 @@ public abstract class WebDriverCreator
 			if (maximized) edgeOptions.AddArgument("--start-maximized");
 			if (minimized) edgeOptions.AddArgument("--start-minimized");
 
-			// Security/Proxy settings
+			edgeOptions.AddArgument("--profile-directory=Default");
+			edgeOptions.AddArgument("--no-first-run");
+			edgeOptions.AddArgument("--no-default-browser-check");
+
+			edgeOptions.AddArgument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36");
+			edgeOptions.AddArgument("--lang=en-US,en;q=0.9");
+			edgeOptions.AddArgument("--disable-3d-apis");
+			edgeOptions.AddArgument("--disable-webgl");
+			edgeOptions.AddArgument("--disable-features=IsolateOrigins,site-per-process");
+
+
 			edgeOptions.AddArgument("--ignore-certificate-errors");
 			edgeOptions.AddArgument("--allow-running-insecure-content");
 			edgeOptions.AddArgument("--disable-extensions");

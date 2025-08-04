@@ -2,5 +2,6 @@
 
 public class TestConfigRoot
 {
-	public string Browser { get; set; }
+	public string Browser { get; set; } = default!;
+	public string DownloadPath { get; set; } = default!;
 }

@@ -33,16 +33,23 @@ public class AboutPage
 		return this;
 	}
 
-	public AboutPage ClickDownloadButton(string pathToFile)
+	public AboutPage ClickDownloadButton(string directory, string file)
 	{
+		var pathToFile = Path.Combine(directory, file);
+
 		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
 		var downloadButton = wait.Until(drv =>
 		{
 			var element = drv.FindElement(DownloadButtonLocator);
 			return element.Displayed ? element : null;
 		});
-		downloadButton.Click();
 
+		if (!Directory.Exists(directory))
+		{
+			Directory.CreateDirectory(directory);
+		}
+
+		downloadButton.Click();
 		wait.Until(_ => File.Exists(pathToFile));
 
 		return this;

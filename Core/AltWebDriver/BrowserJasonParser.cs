@@ -19,11 +19,9 @@ public static class BrowserJasonParser
 	/// <returns></returns>
 	public static Browser GetBrowserType()
     {
-        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Common/TestConfig.json");
-        string json = File.ReadAllText(path);
-        var configRoot = JsonSerializer.Deserialize<TestConfigRoot>(json);
+        var configRoot = JsonStringParser.GetConfig();
 
-        string browserString = configRoot?.Browser ?? "Edge"; // set browser or deafult to Edge to avoid Warning message
+		string browserString = configRoot?.Browser ?? "Edge"; // set browser or deafult to Edge to avoid Warning message
         if (Enum.TryParse<Browser>(browserString, true, out var browserEnum))
         {
 			return browserEnum;
