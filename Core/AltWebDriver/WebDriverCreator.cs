@@ -86,14 +86,13 @@ public abstract class WebDriverCreator
 			chromeOptions.AddArgument("--profile-directory=Default");
 			chromeOptions.AddArgument("--no-first-run");
 			chromeOptions.AddArgument("--no-default-browser-check");
+			chromeOptions.AddArgument("--no-sandbox");
 
 			chromeOptions.AddArgument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36");
 			chromeOptions.AddArgument("--lang=en-US,en;q=0.9");
 			chromeOptions.AddArgument("--disable-3d-apis");
 			chromeOptions.AddArgument("--disable-webgl");
 			chromeOptions.AddArgument("--disable-features=IsolateOrigins,site-per-process");
-
-
 
 			chromeOptions.AddExcludedArgument("enable-automation");
 			chromeOptions.AddAdditionalOption("useAutomationExtension", false);
