@@ -1,4 +1,4 @@
-﻿namespace Core.Core;
+﻿namespace Core.AltWebDriver;
 
 public enum Browser
 {

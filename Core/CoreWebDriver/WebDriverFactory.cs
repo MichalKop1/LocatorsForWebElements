@@ -2,7 +2,7 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Edge;
-using Core.Core;
+using Core.AltWebDriver;
 
 namespace Core.Core;
 

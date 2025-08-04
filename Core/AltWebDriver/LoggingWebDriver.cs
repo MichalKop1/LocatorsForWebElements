@@ -3,8 +3,16 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using System.Collections.ObjectModel;
 
-namespace Core.Core;
+namespace Core.AltWebDriver;
 
+/// <summary>
+/// A wrapper for <see cref="IWebDriver"/> that logs actions and events for debugging and monitoring purposes.
+/// </summary>
+/// <remarks>This class extends the functionality of an <see cref="IWebDriver"/> by providing logging capabilities
+/// for browser interactions, navigation, and other WebDriver operations. It also implements <see
+/// cref="IActionExecutor"/> to log advanced user interactions such as action sequences. <para> The logging is performed
+/// using an <see cref="ILog"/> instance, which records details about operations such as navigation, element searches,
+/// and browser state changes. </para></remarks>
 public class LoggingWebDriver : IWebDriver, IActionExecutor
 {
 	private readonly IWebDriver driver;

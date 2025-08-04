@@ -12,6 +12,7 @@ public class UserFixture : BaseFixture
 {
 	[TestCase("users")]
 	[Category("API")]
+	[Category("Regression")]
 	public async Task VerifyThatUsersCanBeRetrieved(string endpoint)
 	{
 		var request = new RequestBuilder(endpoint)

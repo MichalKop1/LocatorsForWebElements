@@ -1,5 +1,4 @@
 ﻿using Core.AltWebDriver;
-using Core.Core;
 using log4net;
 using log4net.Config;
 using NUnit.Framework.Interfaces;
@@ -22,10 +21,11 @@ public abstract class BaseTest
 		WebDriverCreator create = WebDriverCreatorFactory.GetCreator();
 		driver = create
 			.Incognito()
-			.DownloadReady()
+			.Headless()
 			.Maximized()
+			.DownloadReady()
 			.GetConfiguredWebDriver()
-			.AsLoggingWebDriver(); // extension method to convert the IWebDriver to LoggingWebDriver
+			.AsLoggingWebDriver();
 	}
 
 	[TearDown]

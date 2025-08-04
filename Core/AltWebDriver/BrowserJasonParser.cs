@@ -4,11 +4,19 @@ using System.Text.Json;
 using Core.Common;
 using log4net;
 
-namespace Core.Core;
+namespace Core.AltWebDriver;
 
+/// <summary>
+/// A class for parsing a browser into a <see cref="Browser"/> enum.
+/// </summary>
 public static class BrowserJasonParser
 {
     private static ILog Log = LogManager.GetLogger(typeof(BrowserJasonParser));
+
+	/// <summary>
+	/// Fetches the browser string from a json file and parses it into a <see cref="Browser"/> enum.
+	/// </summary>
+	/// <returns></returns>
 	public static Browser GetBrowserType()
     {
         string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Common/TestConfig.json");

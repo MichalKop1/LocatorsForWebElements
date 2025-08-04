@@ -2,15 +2,23 @@
 
 namespace Core.Core;
 
+/// <summary>
+/// A class for building REST requests with various configurations. 
+/// Uses <see cref="Method.Get"/> by default.
+/// </summary>
 public class RequestBuilder
 {
-	private RestRequest _request;
+	private readonly RestRequest _request;
 
 	public RequestBuilder(string endpoint)
 	{
 		_request = new RestRequest(endpoint, Method.Get);
 	}
 
+	/// <summary>
+	/// Return an instance of <see cref="RestRequest"/> with the configured settings.
+	/// </summary>
+	/// <returns></returns>
 	public RestRequest Build()
 	{
 		return _request;
@@ -46,6 +54,10 @@ public class RequestBuilder
 		return this;
 	}
 
+	/// <summary>
+	/// Allows setting the HTTP method for the request.
+	/// </summary>
+	/// <returns></returns>
 	public RequestBuilder WithMethod(Method method)
 	{
 		_request.Method = method;

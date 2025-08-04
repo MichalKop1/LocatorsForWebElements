@@ -1,4 +1,4 @@
-﻿using Core.Core;
+﻿using Core.AltWebDriver;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;

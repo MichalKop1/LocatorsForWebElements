@@ -9,14 +9,14 @@ namespace Core.Core;
 
 public class RestBuilder
 {
-	private IRestClient _client;
-	private JsonSerializerOptions _serializerOptions;
+	private IRestClient _client = default!;
+	private JsonSerializerOptions _serializerOptions = default!;
 
 	protected ILog Log => LogManager.GetLogger(this.GetType());
 
 	static RestBuilder()
 	{
-		log4net.Config.XmlConfigurator.Configure(new FileInfo("Log.config"));
+		log4net.Config.XmlConfigurator.Configure(new FileInfo("Common/Log.config"));
 	}
 
 	public RestBuilder WithJsonSerializer()

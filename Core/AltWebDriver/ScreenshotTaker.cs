@@ -1,13 +1,8 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using Core.Core;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
-namespace Core.Core
+namespace Core.AltWebDriver
 {
-	public class ScreenshotTaker
+	public static class ScreenshotTaker
 	{
 		private static string NewScreenshotName
 		{

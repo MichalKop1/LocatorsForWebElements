@@ -1,5 +1,4 @@
 ﻿using Core.AltWebDriver;
-using Core.Core;
 using log4net;
 using log4net.Config;
 using OpenQA.Selenium.Chrome;

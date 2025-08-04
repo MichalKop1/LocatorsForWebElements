@@ -1,12 +1,14 @@
-﻿using Core.Core;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using Business.Pages;
+using Core.AltWebDriver;
+using WebDriverTests.Common;
 
 namespace WebDriverTests;
 
 [TestFixture]
 public class EpamPageTests : BaseTest
 {
+	[Log]
 	[TestCase("EPAM_Corporate_Overview_Q4FY-2024.pdf")]
 	public void AboutPage_DownloadFile_Success(string fileName)
 	{
@@ -14,13 +16,14 @@ public class EpamPageTests : BaseTest
 		string fullPath = Path.Combine(downloadsPath, fileName);
 
 		var indexPage = new IndexPage(driver);
+		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
 		indexPage.Open().AcceptCookies();
 
 		indexPage
 			.SelectAbout()
 			.ScrollToDownloadButton()
 			.ClickDownloadButton(fullPath);
-
+		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
 		bool fileExists = File.Exists(fullPath);
 		if (fileExists)
 		{
@@ -29,13 +32,15 @@ public class EpamPageTests : BaseTest
 
 		Assert.That(fileExists, Is.True);
 	}
-	
+
+	[Log]
 	[Test]
 	public void InsightsPage_CarouselDispalysCorrectTextInsideAndOutside()
 	{
 		var indexPage = new IndexPage(driver);
-		indexPage.Open().AcceptCookies();
-
+		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
+		indexPage.Open();
+		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
 		var insightsPage = indexPage
 			.SelectInsights()
 			.SwapCarousel()

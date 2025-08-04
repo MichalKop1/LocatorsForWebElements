@@ -5,6 +5,12 @@ using System.Net;
 
 namespace Core.Core;
 
+/// <summary>
+/// Provides functionality for interacting with a REST API to manage user-related operations.
+/// </summary>
+/// <remarks>The <see cref="UserClient"/> class is designed to facilitate communication with a REST API for user
+/// management. It supports operations such as retrieving a list of users and creating new users. This class implements
+/// <see cref="IDisposable"/> to ensure proper cleanup of resources.</remarks>
 public class UserClient : IUserClient, IDisposable
 {
 	private readonly IRestClient _client;
@@ -18,10 +24,14 @@ public class UserClient : IUserClient, IDisposable
 		_client = client;
 	}
 
+	/// <summary>
+	/// Retrieves a list of users from the API.
+	/// </summary>
+	/// <param name="request">The REST request to execute.</param>
+	/// <returns>A RestResponse containing the list of users.</returns>
 	public async Task<RestResponse<List<User>>> GetUsersAsync(RestRequest request)
 	{
 		Log.Info("Retrieving users from the API.");
-		//var request = new RestRequest("/users", Method.Get);
 		var response = await _client.ExecuteAsync<List<User>>(request);
 
 		if (response.StatusCode != HttpStatusCode.OK)
@@ -31,18 +41,27 @@ public class UserClient : IUserClient, IDisposable
 		}
 		else
 		{
-			var message = $"Successfully retrieved {response.Data.Count} users.";
+			int numberofUsers = response.Data != null ? response.Data.Count : 0;
+			var message = $"Successfully retrieved {numberofUsers} users.";
 			Log.Info(message);
 		}
 
 		return response;
 	}
 
+	/// <summary>
+	/// Sends a POST request to create a new user and returns the server's response.
+	/// </summary>
+	/// <remarks>The method logs the operation's progress and outcome. If the user creation fails, the response will
+	/// contain the error details.</remarks>
+	/// <param name="user">The <see cref="User"/> object containing the details of the user to be created. Cannot be null.</param>
+	/// <param name="request">The <see cref="RestRequest"/> object configured for the POST operation. Must include the target endpoint.</param>
+	/// <returns>A <see cref="RestResponse"/> containing the server's response, including the created <see cref="User"/> object
+	/// if successful.</returns>
 	public async Task<RestResponse<User>> PostUserAsync(User user, RestRequest request)
 	{
 		var message = $"Posting user {user.Username}";
 		Log.Info(message);
-		//var request = new RestRequest("/users", Method.Post);
 		request.AddJsonBody(user);
 
 		var response = await _client.ExecuteAsync<User>(request);
@@ -54,7 +73,7 @@ public class UserClient : IUserClient, IDisposable
 		}
 		else
 		{
-			message = $"User created successfully with ID: {response.Data.Id}";
+			message = $"User created successfully with ID: {response.Data!.Id}";
 			Log.Info(message);
 		}
 

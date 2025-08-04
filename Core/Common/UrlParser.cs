@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
-namespace Core.Common
+namespace Core.Common;
+
+public static class UrlParser
 {
-	public static class UrlParser
+	public static string GetBaseUrl()
 	{
-		public static string GetBaseUrl()
-		{
-			string path = Path.Combine(Directory.GetCurrentDirectory(), "Common/BaseUri.json");
-			string json = File.ReadAllText(path);
+		string path = Path.Combine(Directory.GetCurrentDirectory(), "Common/BaseUri.json");
+		string json = File.ReadAllText(path);
 
-			return JsonSerializer.Deserialize<string>(json)!;
-		}
+		return JsonSerializer.Deserialize<string>(json)!;
 	}
 }

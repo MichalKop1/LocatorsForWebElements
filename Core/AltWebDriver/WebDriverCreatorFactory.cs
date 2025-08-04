@@ -1,10 +1,13 @@
-﻿using Core.Core;
-
-
-namespace Core.AltWebDriver;
+﻿namespace Core.AltWebDriver;
 
 public static class WebDriverCreatorFactory
 {
+	/// <summary>
+	/// Returns a creator for the specified browser type from the json file.
+	/// </summary>
+	/// <remarks>
+	/// 
+	/// </remarks>
 	public static WebDriverCreator GetCreator()
 	{
 		Browser browser = BrowserJasonParser.GetBrowserType();
