@@ -11,7 +11,7 @@ namespace Core.AltWebDriver
 
 		public static string TakeBrowserScreenshot(ITakesScreenshot driver)
 		{
-			var screenshotsDir = Path.Combine(Environment.CurrentDirectory, "Screenshots");
+			var screenshotsDir = FindTestProjectRoot();
 			if (!Directory.Exists(screenshotsDir))
 			{
 				Directory.CreateDirectory(screenshotsDir);
@@ -21,6 +21,21 @@ namespace Core.AltWebDriver
 			screenshot.SaveAsFile(screenshotPath);
 			return screenshotPath;
 		}
-	}
 
+		private static string FindTestProjectRoot(string markerFolderName = "Screenshots")
+		{
+			string dir = AppContext.BaseDirectory;
+
+			while (dir != null)
+			{
+				string potentialPath = Path.Combine(dir, markerFolderName);
+				if (Directory.Exists(potentialPath))
+					return potentialPath;
+
+				dir = Directory.GetParent(dir)?.FullName;
+			}
+
+			throw new DirectoryNotFoundException($"Could not locate '{markerFolderName}' folder in parent directories.");
+		}
+	}
 }

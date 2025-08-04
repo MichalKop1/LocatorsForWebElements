@@ -39,7 +39,7 @@ public class IndexPage
 
 	public IndexPage AcceptCookies()
 	{
-		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 		wait.IgnoreExceptionTypes(typeof(ElementClickInterceptedException), typeof(ElementNotInteractableException));
 
 		wait.Until(drv =>
@@ -95,7 +95,7 @@ public class IndexPage
 
 	public IndexPage ClickSearchIcon()
 	{
-		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 		var searchIcon = wait.Until(drv => drv.FindElement(SearchIconLocator));
 
 		var actions = new Actions(driver);
@@ -108,7 +108,7 @@ public class IndexPage
 
 	public IndexPage WaitForSearchPanel()
 	{
-		var searchPanelWait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
+		var searchPanelWait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 
 		searchPanelWait.Until(driver => driver.FindElement(SearchPanelLocator));
 		return this;
@@ -116,7 +116,7 @@ public class IndexPage
 
 	public IndexPage EnterSearchPhrase(string phrase)
 	{
-		var searchPanelWait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
+		var searchPanelWait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 		
 		var searchPanel = searchPanelWait.Until(driver => driver.FindElement(SearchPanelLocator));
 		var searchInput = searchPanelWait.Until(_ => searchPanel.FindElement(SearchInputLocator));
@@ -137,7 +137,7 @@ public class IndexPage
 
 	public IndexPage ClickFindButton()
 	{
-		var searchPanelWait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
+		var searchPanelWait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 
 		var searchPanel = searchPanelWait.Until(driver => driver.FindElement(SearchPanelLocator));
 		var findButton = searchPanel.FindElement(FindButtonLocator);

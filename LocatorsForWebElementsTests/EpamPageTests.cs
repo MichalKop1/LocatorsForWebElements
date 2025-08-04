@@ -38,9 +38,8 @@ public class EpamPageTests : BaseTest
 	public void InsightsPage_CarouselDispalysCorrectTextInsideAndOutside()
 	{
 		var indexPage = new IndexPage(driver);
-		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
-		indexPage.Open();
-		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
+		indexPage.Open().AcceptCookies();
+
 		var insightsPage = indexPage
 			.SelectInsights()
 			.SwapCarousel()

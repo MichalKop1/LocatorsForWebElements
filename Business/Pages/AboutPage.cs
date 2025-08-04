@@ -1,12 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Pages;
 
@@ -37,7 +31,7 @@ public class AboutPage
 	{
 		var pathToFile = Path.Combine(directory, file);
 
-		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+		var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 		var downloadButton = wait.Until(drv =>
 		{
 			var element = drv.FindElement(DownloadButtonLocator);
