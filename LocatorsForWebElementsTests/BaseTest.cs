@@ -18,8 +18,6 @@ public abstract class BaseTest
 	[SetUp]
 	public void Setup()
 	{
-		XmlConfigurator.Configure(new FileInfo("Log.config"));
-	
 		WebDriverCreator create = WebDriverCreatorFactory.GetCreator();
 		driver = create
 			.Headless()

@@ -16,8 +16,10 @@ public class EpamPageTests : BaseTest
 		string fullPath = Path.Combine(downloadsPath, fileName);
 
 		var indexPage = new IndexPage(driver);
+
+		indexPage.Open();
 		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
-		indexPage.Open().AcceptCookies();
+		indexPage.AcceptCookies();
 
 		indexPage
 			.SelectAbout()
@@ -38,7 +40,10 @@ public class EpamPageTests : BaseTest
 	public void InsightsPage_CarouselDispalysCorrectTextInsideAndOutside()
 	{
 		var indexPage = new IndexPage(driver);
-		indexPage.Open().AcceptCookies();
+		indexPage.Open();
+		ScreenshotTaker.TakeBrowserScreenshot((ITakesScreenshot)driver.Driver);
+
+		indexPage.AcceptCookies();
 
 		var insightsPage = indexPage
 			.SelectInsights()
