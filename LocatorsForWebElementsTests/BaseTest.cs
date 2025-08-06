@@ -22,7 +22,7 @@ public abstract class BaseTest
 	
 		WebDriverCreator create = WebDriverCreatorFactory.GetCreator();
 		driver = create
-			//.Headless()
+			.Headless()
 			.Maximized()
 			.DownloadReady()
 			.GetConfiguredWebDriver()
