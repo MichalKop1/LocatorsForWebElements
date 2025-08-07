@@ -64,7 +64,7 @@ jobs:
       - name: Run API tests
         run: |
           dotnet test Tests/RestTests.csproj --filter Category=API --configuration Debug --no-build --logger "trx;LogFileName=api_test_results.trx"
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Publish API test results
         if: always()
