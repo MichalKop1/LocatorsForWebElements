@@ -64,15 +64,13 @@ jobs:
       - name: Run API tests
         run: |
           dotnet test Tests/RestTests.csproj --filter Category=API --configuration Debug --no-build --logger "trx;LogFileName=api_test_results.trx"
-        continue-on-error: false
 
       - name: Publish API test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: api-test-results
-          path: Tests/TestResults/
-
+          path: LocatorsForWebElementsTests/TestResults/
 
   ui-tests:
     runs-on: windows-latest
