@@ -23,6 +23,7 @@ public class IndexPage
 	public IndexPage(IWebDriver driver)
 	{
 		this.driver = driver ?? throw new ArgumentException(nameof(driver));
+		
 	}
 
 	public IndexPage Open(string link)
